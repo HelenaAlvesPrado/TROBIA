@@ -1571,6 +1571,8 @@ c     outputs
       real :: cleafini(npfts)
       real :: cawoodini(npfts)
       real :: cfrootini(npfts)
+      real :: ocp(npfts)
+      logical :: inutil(npfts)
       real*8 cleafi_aux(nt)
       real*8 cfrooti_aux(nt)
       real*8 cawoodi_aux(nt)
@@ -1644,8 +1646,14 @@ c     outputs
                   endif   
                endif
             endif
-         enddo                  !nt
-      enddo                     ! npfts 
+         enddo
+         enddo    
+         call pft_area_frac(cleafini,cfrootini,cawoodini,ocp,inutil)              !nt
+         do i6=1,npfts
+            cleafini(i6) = cleafini(i6) * ocp(i6)
+            cfrootini(i6) = cfrootini(i6) * ocp(i6)
+            cawoodini(i6) = cawoodini(i6) * ocp(i6)
+         enddo                     ! npfts 
  200  continue
       return
       end subroutine spinup

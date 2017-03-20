@@ -346,6 +346,7 @@ c     Write to track program execution
                endif
                goto 10               
  100           continue
+
 !     PFTs equilibrium check
 !     ==================================================
 !     tentativa 1 - usando variacao no pool de C vegetal
@@ -355,7 +356,7 @@ c     Write to track program execution
                   biomass = 0.0
                   biomass0 = 0.0
                   check = .false.
-                  sensi = 1.0 ! (kg/m2/y) if biomas change .le. sensi: equilibrium
+                  sensi = 0.5 ! (kg/m2/y) if biomas change .le. sensi: equilibrium
                   call pft_par(4,wood)
 
                   do p = 1,q
@@ -379,7 +380,7 @@ c     Write to track program execution
                      endif
                   enddo
                   if(check) then
-                     if (abs(biomass-biomass0) .gt. sensi) then
+                     if (abs(biomass0-biomass) .gt. sensi) then
                         do p=1,q
                            leaf0(p) = cleaf1_pft(p)
                            froot0(p) = cfroot1_pft(p)
@@ -508,6 +509,7 @@ c      real f1b (npft)           !Photosynthesis (micromol/m2/s)
       real rg(npft),rgl(npft),rgf(npft),rgs(npft)
       real cl1(npft),cf1(npft),ca1(npft) ! carbon pre-allocation 
       real cl2(npft),cf2(npft),ca2(npft) ! carbon pos-allocation
+      real dl(npft)
       
 
 !     Initialize Canopy Resistence Parameters
@@ -603,6 +605,7 @@ c      rh    = 0.685
             rgl(p)   = 0.0
             rgf(p)   = 0.0
             rgs(p)   = 0.0
+            dl(p)    = 0.0
 
             if ((i.eq.1).and.(month.eq.1)) then    
                beta_leaf(p) = 0.00000001
@@ -637,7 +640,7 @@ c      rh    = 0.685
 c     Carbon allocation (carbon content on each compartment)
 !     =====================================================
             call allocation (p, nppa(p), cl1(p), ca1(p), !output !input
-     &          cf1(p),cl2(p), ca2(p), cf2(p)) 
+     &          cf1(p),cl2(p), ca2(p), cf2(p),dl(p)) 
 
             
             alfa_leaf(p)  = cl2(p) - cl1(p)
@@ -691,8 +694,8 @@ c     Carbon allocation (carbon content on each compartment)
                
 !     Carbon cycle (Microbial respiration, litter and soil carbon)
 !     ============================================================     
-               call carbon2 (ts,f5(p),evap(p),laia(p)
-     &             ,cl(p),cs(p),hr(p))   
+               call carbon2 (ts,f5(p),evap(p),laia(p),dl(p),
+     &              cl(p),cs(p),hr(p))   
             endif
 
 !     Accumulate daily budgets weighted by occupation coefficients
