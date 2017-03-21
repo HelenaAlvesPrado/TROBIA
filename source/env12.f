@@ -584,7 +584,7 @@ C     preparando o terreno pra salvar as variaveis
       do i = 1,nx
          do j = 1,ny
             if(nint(lsmk(i,j)) .ne. 0) then
-		if ((ave_npp(i,j).ne.0).and.(ave_ph(i,j).ne.0)) then
+                if ((ave_npp(i,j).ne.0).and.(ave_ph(i,j).ne.0)) then
                    cue(i,j) = ave_npp(i,j)/ave_ph(i,j)
                 else
                 cue(i,j) = 0.
