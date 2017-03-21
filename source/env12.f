@@ -118,11 +118,11 @@ c     variaveis anuais -
       real, dimension(nx,ny) :: ave_runom = 0.0
       real, dimension(nx,ny) :: ave_evap = 0.0
       real, dimension(nx,ny) :: ave_wsoil = 0.0
-      real, dimension(nx,ny) :: cue = 0.0	 !carbon use efficience (npp/ph)
-      real, dimension(nx,ny) :: total_biomass = 0.0	 !total biomass (kgC/m2/yr)	  
-      real, dimension(nx,ny) :: cleaf = 0.0	 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
-      real, dimension(nx,ny) :: cfroot = 0.0	 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
-      real, dimension(nx,ny) :: cawood = 0.0	 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cue = 0.0 !carbon use efficience (npp/ph)
+      real, dimension(nx,ny) :: total_biomass = 0.0 !total biomass (kgC/m2/yr)	  
+      real, dimension(nx,ny) :: cleaf = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cfroot = 0.0 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cawood = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
 	  
 	  
 	  
@@ -150,22 +150,22 @@ C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; 
       
 C     NEW OUTPUTS (AUTOTRF RESPIRATION, ALLOCATION)
       
-      real, dimension(nx,ny,12) :: rml,rml1,rml2,rml3,rml4,rml5,
-     & rml6,rml7,rml8,rml9,rml10,rml11,rml12 
-      real, dimension(nx,ny,12) :: rmf,rmf1,rmf2,rmf3,rmf4,rmf5,
-     & rmf6,rmf7,rmf8,rmf9,rmf10,rmf11,rmf12  
-      real, dimension(nx,ny,12) :: rms,rms1,rms2,rms3,rms4,rms5,
-     & rms6,rms7,rms8,rms9,rms10,rms11,rms12 
-      real, dimension(nx,ny,12) :: rm,rm1,rm2,rm3,rm4,rm5,rm6,
-     & rm7,rm8,rm9,rm10,rm11,rm12 
-      real, dimension(nx,ny,12) :: rgl,rgl1,rgl2,rgl3,rgl4,rgl5,
-     & rgl6,rgl7,rgl8,rgl9,rgl10,rgl11,rgl12 
-      real, dimension(nx,ny,12) :: rgf,rgf1,rgf2,rgf3,rgf4,rgf5,
-     & rgf6,rgf7,rgf8, rgf9,rgf10,rgf11,rgf12 
-      real, dimension(nx,ny,12) :: rgs,rgs1,rgs2,rgs3,rgs4,rgs5,
-     & rgs6,rgs7,rgs8,rgs9,rgs10,rgs11,rgs12 
-      real, dimension(nx,ny,12) :: rg,rg1,rg2,rg3,rg4,rg5,rg6,
-     & rg7,rg8,rg9,rg10, rg11,rg12  
+      real, dimension(nx,ny,12) :: rml !,rml1,rml2,rml3,rml4,rml5,
+!     & rml6,rml7,rml8,rml9,rml10,rml11,rml12 
+      real, dimension(nx,ny,12) :: rmf !,rmf1,rmf2,rmf3,rmf4,rmf5,
+!     & rmf6,rmf7,rmf8,rmf9,rmf10,rmf11,rmf12  
+      real, dimension(nx,ny,12) :: rms !,rms1,rms2,rms3,rms4,rms5,
+!     & rms6,rms7,rms8,rms9,rms10,rms11,rms12 
+      real, dimension(nx,ny,12) :: rm !,rm1,rm2,rm3,rm4,rm5,rm6,
+!     & rm7,rm8,rm9,rm10,rm11,rm12 
+      real, dimension(nx,ny,12) :: rgl !,rgl1,rgl2,rgl3,rgl4,rgl5,
+!     & rgl6,rgl7,rgl8,rgl9,rgl10,rgl11,rgl12 
+      real, dimension(nx,ny,12) :: rgf !,rgf1,rgf2,rgf3,rgf4,rgf5,
+!     & rgf6,rgf7,rgf8, rgf9,rgf10,rgf11,rgf12 
+      real, dimension(nx,ny,12) :: rgs !,rgs1,rgs2,rgs3,rgs4,rgs5,
+!     & rgs6,rgs7,rgs8,rgs9,rgs10,rgs11,rgs12 
+      real, dimension(nx,ny,12) :: rg !rg1,rg2,rg3,rg4,rg5,rg6,
+!     & rg7,rg8,rg9,rg10, rg11,rg12  
       
 C     -------END DECLARATION----------------------------------------
       
