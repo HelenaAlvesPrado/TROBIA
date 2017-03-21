@@ -123,9 +123,7 @@ c     variaveis anuais -
       real, dimension(nx,ny) :: cleaf = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
       real, dimension(nx,ny) :: cfroot = 0.0 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
       real, dimension(nx,ny) :: cawood = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
-	  
-	  
-	  
+
 C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; ph1 to pft 1)
       real, dimension(nx,ny,12) :: ph,ph1,ph2,ph3,ph4,ph5,ph6,
      & ph7,ph8,ph9,ph10,ph11,ph12
@@ -340,15 +338,15 @@ c     if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
       
 	  
 	     do i=1,nx
-         do j=1,ny
-            if (lsmk(i,j).eq.1) then
-            do p=1,q
+             do j=1,ny
+             if (lsmk(i,j).eq.1) then
+             do p=1,q
              cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
 			 cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
 			 cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
 
-            enddo
-			 total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
+             enddo
+             total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
             endif
             enddo
             enddo
@@ -589,12 +587,12 @@ C     preparando o terreno pra salvar as variaveis
             if(nint(lsmk(i,j)) .ne. 0) then
 		if ((ave_npp(i,j).ne.0).and.(ave_ph(i,j).ne.0)) then
 		   cue(i,j) = ave_npp(i,j)/ave_ph(i,j)
-               else
-               cue(i,j) = 0.
+                else
+                cue(i,j) = 0.
             endif
             else 
             cue(i,j)= no_data
-            endif	   
+            endif
 !		print*, 'cue', cue(i,j)  
          enddo
       enddo
