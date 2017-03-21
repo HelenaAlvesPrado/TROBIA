@@ -611,7 +611,6 @@ C     preparando o terreno pra salvar as variaveis
       write(50,rec=9) ave_evap
       write(50,rec=10) ave_wsoil
       write(50,rec=11) ave_ph
-      write(50,rec=12) cue
       write(50,rec=12) total_biomass
       close(50)
 
