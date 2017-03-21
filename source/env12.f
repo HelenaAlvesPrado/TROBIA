@@ -334,16 +334,15 @@ c     if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
      &    clit_pft,csoil_pft, hresp_pft,rcm_pft,runom_pft,
      &    evapm_pft,wsoil_pft,rml_pft,rmf_pft,rms_pft,rm_pft,rgl_pft
      &    ,rgf_pft,rgs_pft,rg_pft,cleaf_pft,cawood_pft, cfroot_pft
-     &    ,gridcell_ocp,betal,betaw,betaf)   
-      
-	  
-	     do i=1,nx
+     &    ,gridcell_ocp,betal,betaw,betaf)
+
+             do i=1,nx
              do j=1,ny
              if (lsmk(i,j).eq.1) then
              do p=1,q
              cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
-			 cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
-			 cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
+                         cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
+                         cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
 
              enddo
              total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
@@ -586,7 +585,7 @@ C     preparando o terreno pra salvar as variaveis
          do j = 1,ny
             if(nint(lsmk(i,j)) .ne. 0) then
 		if ((ave_npp(i,j).ne.0).and.(ave_ph(i,j).ne.0)) then
-		   cue(i,j) = ave_npp(i,j)/ave_ph(i,j)
+                   cue(i,j) = ave_npp(i,j)/ave_ph(i,j)
                 else
                 cue(i,j) = 0.
             endif
