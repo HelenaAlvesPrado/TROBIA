@@ -118,8 +118,14 @@ c     variaveis anuais -
       real, dimension(nx,ny) :: ave_runom = 0.0
       real, dimension(nx,ny) :: ave_evap = 0.0
       real, dimension(nx,ny) :: ave_wsoil = 0.0
-      real, dimension(nx,ny) :: cue = 0.0	 !carbon use efficience (npp/ph)    
-      
+      real, dimension(nx,ny) :: cue = 0.0	 !carbon use efficience (npp/ph)
+      real, dimension(nx,ny) :: total_biomass = 0.0	 !total biomass (kgC/m2/yr)	  
+      real, dimension(nx,ny) :: cleaf = 0.0	 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cfroot = 0.0	 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cawood = 0.0	 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+	  
+	  
+	  
 C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; ph1 to pft 1)
       real, dimension(nx,ny,12) :: ph,ph1,ph2,ph3,ph4,ph5,ph6,
      & ph7,ph8,ph9,ph10,ph11,ph12
@@ -186,13 +192,13 @@ C     -------END DECLARATION----------------------------------------
       open(26,file='../inputs/npp.bin',status='old',
      &     form='unformatted',access='direct',recl=4*nx*ny)
 
-c      open(27,file='../spinup/clini.bin',status='old',
+c      open(27,file='../spinup/clini.flt',status='old',
 c     &    form='unformatted',access='direct',recl=4*nx*ny)
 c
-c      open(28,file='../spinup/cfini.bin',status='old',
+c      open(28,file='../spinup/cfini.flt',status='old',
 c     &    form='unformatted',access='direct',recl=4*nx*ny)
 c
-c      open(29,file='../spinup/cwini.bin',status='old',
+c      open(29,file='../spinup/cwini.flt',status='old',
 c     &    form='unformatted',access='direct',recl=4*nx*ny)
 !     Read data
 !     =========
@@ -272,19 +278,19 @@ c     Calculating annual npp
       enddo
       
       call nan2ndt(cleafin, q)  !!! --------- incorporado essa subroutina
-      open(10,file='../spinup/clini.bin',
+      open(10,file='../spinup/clini.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cleafin, q)
       
       call nan2ndt(cfrootin, q)
-      open(10,file='../spinup/cfini.bin',
+      open(10,file='../spinup/cfini.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cfrootin, q)
       
       call nan2ndt(cawoodin, q)
-      open(10,file='../spinup/cwini.bin',
+      open(10,file='../spinup/cwini.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cawoodin, q)
@@ -332,30 +338,44 @@ c     if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
      &    ,rgf_pft,rgs_pft,rg_pft,cleaf_pft,cawood_pft, cfroot_pft
      &    ,gridcell_ocp,betal,betaw,betaf)   
       
+	  
+	     do i=1,nx
+         do j=1,ny
+            if (lsmk(i,j).eq.1) then
+            do p=1,q
+             cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
+			 cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
+			 cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
+
+            enddo
+			 total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
+            endif
+            enddo
+            enddo
       
       
       
 !     SAVE RESULTS TO FILES
 c      call nan2ndt(gridcell_ocp, q)
-      open(10,file='../outputs/gridcell_ocp.bin',
+      open(10,file='../outputs/gridcell_ocp.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, gridcell_ocp, q)
       
 c      call nan2ndt(cleaf_pft, q)
-      open(10,file='../outputs/cleaf.bin',
+      open(10,file='../outputs/cleaf.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cleaf_pft, q)
       
 c      call nan2ndt(cawood_pft, q)
-      open(10,file='../outputs/cawood.bin',
+      open(10,file='../outputs/cawood.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10,cawood_pft,q)
       
 c      call nan2ndt(cfroot_pft, q)
-      open(10,file='../outputs/cfroot.bin',
+      open(10,file='../outputs/cfroot.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cfroot_pft,q)
@@ -442,92 +462,92 @@ C     preparando o terreno pra salvar as variaveis
          enddo
       enddo  
 
-      open(10,file='../outputs/ph.bin',
+      open(10,file='../outputs/ph.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, ph)
       
-      open(10,file='../outputs/ar.bin',
+      open(10,file='../outputs/ar.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, ar)
 
-      open(10,file='../outputs/npp.bin',
+      open(10,file='../outputs/npp.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp)
 
-      open(10,file='../outputs/clit.bin',
+      open(10,file='../outputs/clit.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit)
 
-      open(10,file='../outputs/csoil.bin',
+      open(10,file='../outputs/csoil.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil)
 
-      open(10,file='../outputs/hr.bin',
+      open(10,file='../outputs/hr.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, hr)
 
-      open(10,file='../outputs/rcm.bin',
+      open(10,file='../outputs/rcm.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rcm)
 
-      open(10,file='../outputs/runom.bin',
+      open(10,file='../outputs/runom.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, runom)
 
-      open(10,file='../outputs/evaptr.bin',
+      open(10,file='../outputs/evaptr.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, evaptr)
 
-      open(10,file='../outputs/wsoil.bin',
+      open(10,file='../outputs/wsoil.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, wsoil)
 
-      open(10,file='../outputs/rml.bin',
+      open(10,file='../outputs/rml.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rml)
 
-      open(10,file='../outputs/rms.bin',
+      open(10,file='../outputs/rms.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rms)
 
-      open(10,file='../outputs/rmf.bin',
+      open(10,file='../outputs/rmf.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rmf)
 
-      open(10,file='../outputs/rm.bin',
+      open(10,file='../outputs/rm.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rm)
 
-      open(10,file='../outputs/rgl.bin',
+      open(10,file='../outputs/rgl.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rgl)
 
-      open(10,file='../outputs/rgf.bin',
+      open(10,file='../outputs/rgf.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rgf)
 
-      open(10,file='../outputs/rgs.bin',
+      open(10,file='../outputs/rgs.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rgs)
 
-      open(10,file='../outputs/rg.bin',
+      open(10,file='../outputs/rg.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rg)
@@ -580,7 +600,7 @@ C     preparando o terreno pra salvar as variaveis
       enddo
 
 
-      open(50,file='../outputs/ambientais.bin',
+      open(50,file='../outputs/ambientais.flt',
      &        status='unknown',form='unformatted',
      &        access='direct',recl=4*nx*ny)
       write(50,rec=1) ave_npp
@@ -595,6 +615,7 @@ C     preparando o terreno pra salvar as variaveis
       write(50,rec=10) ave_wsoil
       write(50,rec=11) ave_ph
       write(50,rec=12) cue
+      write(50,rec=12) total_biomass
       close(50)
 
       
@@ -909,561 +930,561 @@ c
 
       
 !     NPP
-      open(10,file='../outputs_pft/npp.1.bin',
+      open(10,file='../outputs_pft/npp.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp1)
-      open(10,file='../outputs_pft/npp.2.bin',
+      open(10,file='../outputs_pft/npp.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp2)
-      open(10,file='../outputs_pft/npp.3.bin',
+      open(10,file='../outputs_pft/npp.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp3)
-      open(10,file='../outputs_pft/npp.4.bin',
+      open(10,file='../outputs_pft/npp.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp4)
-      open(10,file='../outputs_pft/npp.5.bin',
+      open(10,file='../outputs_pft/npp.5.flt',
      &     status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp5)
-      open(10,file='../outputs_pft/npp.6.bin',
+      open(10,file='../outputs_pft/npp.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp6)
-      open(10,file='../outputs_pft/npp.7.bin',
+      open(10,file='../outputs_pft/npp.7.flt',
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp7)
-      open(10,file='../outputs_pft/npp.8.bin',
+      open(10,file='../outputs_pft/npp.8.flt',
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp8)
-      open(10,file='../outputs_pft/npp.9.bin',
+      open(10,file='../outputs_pft/npp.9.flt',
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp9)
-      open(10,file='../outputs_pft/npp.10.bin',
+      open(10,file='../outputs_pft/npp.10.flt',
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp10)
-      open(10,file='../outputs_pft/npp.11.bin',
+      open(10,file='../outputs_pft/npp.11.flt',
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp11)
-      open(10,file='../outputs_pft/npp.12.bin',
+      open(10,file='../outputs_pft/npp.12.flt',
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp12)                  
 c
 c
 !     PHOTO      
-      open(10,file='../outputs_pft/ph.1.bin',
+      open(10,file='../outputs_pft/ph.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph1)
-      open(10,file='../outputs_pft/ph.2.bin',
+      open(10,file='../outputs_pft/ph.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph2)
-      open(10,file='../outputs_pft/ph.3.bin',
+      open(10,file='../outputs_pft/ph.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph3)
-      open(10,file='../outputs_pft/ph.4.bin',
+      open(10,file='../outputs_pft/ph.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph4)
-      open(10,file='../outputs_pft/ph.5.bin',
+      open(10,file='../outputs_pft/ph.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph5)
-      open(10,file='../outputs_pft/ph.6.bin',
+      open(10,file='../outputs_pft/ph.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph6)
-      open(10,file='../outputs_pft/ph.7.bin',
+      open(10,file='../outputs_pft/ph.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph7)
-      open(10,file='../outputs_pft/ph.8.bin',
+      open(10,file='../outputs_pft/ph.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph8)
-      open(10,file='../outputs_pft/ph.9.bin',
+      open(10,file='../outputs_pft/ph.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph9)
-      open(10,file='../outputs_pft/ph.10.bin',
+      open(10,file='../outputs_pft/ph.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph10)
-      open(10,file='../outputs_pft/ph.11.bin',
+      open(10,file='../outputs_pft/ph.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph11)
-      open(10,file='../outputs_pft/ph.12.bin',
+      open(10,file='../outputs_pft/ph.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph12)                              
 c
 c      
 !     ARESP
-      open(10,file='../outputs_pft/ar.1.bin',
+      open(10,file='../outputs_pft/ar.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar1)
-      open(10,file='../outputs_pft/ar.2.bin',
+      open(10,file='../outputs_pft/ar.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar2)
-      open(10,file='../outputs_pft/ar.3.bin',
+      open(10,file='../outputs_pft/ar.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar3)
-      open(10,file='../outputs_pft/ar.4.bin',
+      open(10,file='../outputs_pft/ar.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar4)
-      open(10,file='../outputs_pft/ar.5.bin',
+      open(10,file='../outputs_pft/ar.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar5)
-      open(10,file='../outputs_pft/ar.6.bin',
+      open(10,file='../outputs_pft/ar.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar6)
-      open(10,file='../outputs_pft/ar.7.bin',
+      open(10,file='../outputs_pft/ar.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar7)
-      open(10,file='../outputs_pft/ar.8.bin',
+      open(10,file='../outputs_pft/ar.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar8)
-      open(10,file='../outputs_pft/ar.9.bin',
+      open(10,file='../outputs_pft/ar.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar9)
-      open(10,file='../outputs_pft/ar.10.bin',
+      open(10,file='../outputs_pft/ar.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar10)
-      open(10,file='../outputs_pft/ar.11.bin',
+      open(10,file='../outputs_pft/ar.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar11)
-      open(10,file='../outputs_pft/ar.12.bin',
+      open(10,file='../outputs_pft/ar.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar12)                              
 c
 c      
 !     HRESP
-      open(10,file='../outputs_pft/hr.1.bin',
+      open(10,file='../outputs_pft/hr.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr1)
-      open(10,file='../outputs_pft/hr.2.bin',
+      open(10,file='../outputs_pft/hr.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr2)
-      open(10,file='../outputs_pft/hr.3.bin',
+      open(10,file='../outputs_pft/hr.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr3)
-      open(10,file='../outputs_pft/hr.4.bin',
+      open(10,file='../outputs_pft/hr.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr4)
-      open(10,file='../outputs_pft/hr.5.bin',
+      open(10,file='../outputs_pft/hr.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr5)
-      open(10,file='../outputs_pft/hr.6.bin',
+      open(10,file='../outputs_pft/hr.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr6)
-      open(10,file='../outputs_pft/hr.7.bin',
+      open(10,file='../outputs_pft/hr.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr7)
-      open(10,file='../outputs_pft/hr.8.bin',
+      open(10,file='../outputs_pft/hr.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr8)
-      open(10,file='../outputs_pft/hr.9.bin',
+      open(10,file='../outputs_pft/hr.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr9)
-      open(10,file='../outputs_pft/hr.10.bin',
+      open(10,file='../outputs_pft/hr.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr10)
-      open(10,file='../outputs_pft/hr.11.bin',
+      open(10,file='../outputs_pft/hr.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr11)
-      open(10,file='../outputs_pft/hr.12.bin',
+      open(10,file='../outputs_pft/hr.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr12)
 c
 c
 !     CLIT
-      open(10,file='../outputs_pft/clit.1.bin',
+      open(10,file='../outputs_pft/clit.1.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit1)
-      open(10,file='../outputs_pft/clit.2.bin',
+      open(10,file='../outputs_pft/clit.2.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit2)
-      open(10,file='../outputs_pft/clit.3.bin',
+      open(10,file='../outputs_pft/clit.3.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit3)
-      open(10,file='../outputs_pft/clit.4.bin',
+      open(10,file='../outputs_pft/clit.4.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit4)
-      open(10,file='../outputs_pft/clit.5.bin',
+      open(10,file='../outputs_pft/clit.5.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit5)
-      open(10,file='../outputs_pft/clit.6.bin',
+      open(10,file='../outputs_pft/clit.6.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit6)
-      open(10,file='../outputs_pft/clit.7.bin',
+      open(10,file='../outputs_pft/clit.7.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit7)
-      open(10,file='../outputs_pft/clit.8.bin',
+      open(10,file='../outputs_pft/clit.8.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit8)
-      open(10,file='../outputs_pft/clit.9.bin',
+      open(10,file='../outputs_pft/clit.9.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit9)
-      open(10,file='../outputs_pft/clit.10.bin',
+      open(10,file='../outputs_pft/clit.10.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit10)
-      open(10,file='../outputs_pft/clit.11.bin',
+      open(10,file='../outputs_pft/clit.11.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit11)
-      open(10,file='../outputs_pft/clit.12.bin',
+      open(10,file='../outputs_pft/clit.12.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit12)
 c
 c
 !     CSOIL
-      open(10,file='../outputs_pft/csoil.1.bin',
+      open(10,file='../outputs_pft/csoil.1.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil1)
-      open(10,file='../outputs_pft/csoil.2.bin',
+      open(10,file='../outputs_pft/csoil.2.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil2)
-      open(10,file='../outputs_pft/csoil.3.bin',
+      open(10,file='../outputs_pft/csoil.3.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil3)
-      open(10,file='../outputs_pft/csoil.4.bin',
+      open(10,file='../outputs_pft/csoil.4.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil4)
-      open(10,file='../outputs_pft/csoil.5.bin',
+      open(10,file='../outputs_pft/csoil.5.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil5)
-      open(10,file='../outputs_pft/csoil.6.bin',
+      open(10,file='../outputs_pft/csoil.6.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil6)
-      open(10,file='../outputs_pft/csoil.7.bin',
+      open(10,file='../outputs_pft/csoil.7.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil7)
-      open(10,file='../outputs_pft/csoil.8.bin',
+      open(10,file='../outputs_pft/csoil.8.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil8)
-      open(10,file='../outputs_pft/csoil.9.bin',
+      open(10,file='../outputs_pft/csoil.9.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil9)
-      open(10,file='../outputs_pft/csoil.10.bin',
+      open(10,file='../outputs_pft/csoil.10.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil10)
-      open(10,file='../outputs_pft/csoil.11.bin',
+      open(10,file='../outputs_pft/csoil.11.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil1)
-      open(10,file='../outputs_pft/csoil.12.bin',
+      open(10,file='../outputs_pft/csoil.12.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil12)
 c
 c
 !     EVAPM
-      open(10,file='../outputs_pft/et.1.bin',
+      open(10,file='../outputs_pft/et.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et1)
-      open(10,file='../outputs_pft/et.2.bin',
+      open(10,file='../outputs_pft/et.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et2)
-      open(10,file='../outputs_pft/et.3.bin',
+      open(10,file='../outputs_pft/et.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et3)
-      open(10,file='../outputs_pft/et.4.bin',
+      open(10,file='../outputs_pft/et.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et4)
-      open(10,file='../outputs_pft/et.5.bin',
+      open(10,file='../outputs_pft/et.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et5)
-      open(10,file='../outputs_pft/et.6.bin',
+      open(10,file='../outputs_pft/et.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et6)
-      open(10,file='../outputs_pft/et.7.bin',
+      open(10,file='../outputs_pft/et.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et7)
-      open(10,file='../outputs_pft/et.8.bin',
+      open(10,file='../outputs_pft/et.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et8)
-      open(10,file='../outputs_pft/et.9.bin',
+      open(10,file='../outputs_pft/et.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et9)
-      open(10,file='../outputs_pft/et.10.bin',
+      open(10,file='../outputs_pft/et.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et10)
-      open(10,file='../outputs_pft/et.11.bin',
+      open(10,file='../outputs_pft/et.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et11)
-      open(10,file='../outputs_pft/et.12.bin',
+      open(10,file='../outputs_pft/et.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, et12)
 c      
 c
 !     RCM 
-      open(10,file='../outputs_pft/rcm.1.bin',
+      open(10,file='../outputs_pft/rcm.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm1)  
-      open(10,file='../outputs_pft/rcm.2.bin',
+      open(10,file='../outputs_pft/rcm.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm2)
-      open(10,file='../outputs_pft/rcm.3.bin',
+      open(10,file='../outputs_pft/rcm.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm3)
-      open(10,file='../outputs_pft/rcm.4.bin',
+      open(10,file='../outputs_pft/rcm.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm4)
-      open(10,file='../outputs_pft/rcm.5.bin',
+      open(10,file='../outputs_pft/rcm.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm5)
-      open(10,file='../outputs_pft/rcm.6.bin',
+      open(10,file='../outputs_pft/rcm.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm6)
-      open(10,file='../outputs_pft/rcm.7.bin',
+      open(10,file='../outputs_pft/rcm.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm7)
-      open(10,file='../outputs_pft/rcm.8.bin',
+      open(10,file='../outputs_pft/rcm.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm8)
-      open(10,file='../outputs_pft/rcm.9.bin',
+      open(10,file='../outputs_pft/rcm.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm9)
-      open(10,file='../outputs_pft/rcm.10.bin',
+      open(10,file='../outputs_pft/rcm.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm10)
-      open(10,file='../outputs_pft/rcm.11.bin',
+      open(10,file='../outputs_pft/rcm.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm11)
-      open(10,file='../outputs_pft/rcm.12.bin',
+      open(10,file='../outputs_pft/rcm.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm12)
 c
 c   
 !     BLEAF
-      open(10,file='../outputs_pft/bl.1.bin',
+      open(10,file='../outputs_pft/bl.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl1)
-      open(10,file='../outputs_pft/bl.2.bin',
+      open(10,file='../outputs_pft/bl.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl2)
-      open(10,file='../outputs_pft/bl.3.bin',
+      open(10,file='../outputs_pft/bl.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl3)
-      open(10,file='../outputs_pft/bl.4.bin',
+      open(10,file='../outputs_pft/bl.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl4)
-      open(10,file='../outputs_pft/bl.5.bin',
+      open(10,file='../outputs_pft/bl.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl5)
-      open(10,file='../outputs_pft/bl.6.bin',
+      open(10,file='../outputs_pft/bl.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl6)
-      open(10,file='../outputs_pft/bl.7.bin',
+      open(10,file='../outputs_pft/bl.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl7)
-      open(10,file='../outputs_pft/bl.8.bin',
+      open(10,file='../outputs_pft/bl.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl8)
-      open(10,file='../outputs_pft/bl.9.bin',
+      open(10,file='../outputs_pft/bl.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl9)
-      open(10,file='../outputs_pft/bl.10.bin',
+      open(10,file='../outputs_pft/bl.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl10)
-      open(10,file='../outputs_pft/bl.11.bin',
+      open(10,file='../outputs_pft/bl.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl11)
-      open(10,file='../outputs_pft/bl.12.bin',
+      open(10,file='../outputs_pft/bl.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl12)
 c
 c
 !     BAWOOD
-      open(10,file='../outputs_pft/bw.1.bin',
+      open(10,file='../outputs_pft/bw.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw1)
-      open(10,file='../outputs_pft/bw.2.bin',
+      open(10,file='../outputs_pft/bw.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw2)
-      open(10,file='../outputs_pft/bw.3.bin',
+      open(10,file='../outputs_pft/bw.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw3)
-      open(10,file='../outputs_pft/bw.4.bin',
+      open(10,file='../outputs_pft/bw.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw4)
-      open(10,file='../outputs_pft/bw.5.bin',
+      open(10,file='../outputs_pft/bw.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw5)
-      open(10,file='../outputs_pft/bw.6.bin',
+      open(10,file='../outputs_pft/bw.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw6)
-      open(10,file='../outputs_pft/bw.7.bin',
+      open(10,file='../outputs_pft/bw.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw7)
-      open(10,file='../outputs_pft/bw.8.bin',
+      open(10,file='../outputs_pft/bw.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw8)
-      open(10,file='../outputs_pft/bw.9.bin',
+      open(10,file='../outputs_pft/bw.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw9)
-      open(10,file='../outputs_pft/bw.10.bin',
+      open(10,file='../outputs_pft/bw.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw10)
-      open(10,file='../outputs_pft/bw.11.bin',
+      open(10,file='../outputs_pft/bw.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw11)
-      open(10,file='../outputs_pft/bw.12.bin',
+      open(10,file='../outputs_pft/bw.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw12)
 c
 c
 !     BFROOT
-      open(10,file='../outputs_pft/bf.1.bin',
+      open(10,file='../outputs_pft/bf.1.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl1)
-      open(10,file='../outputs_pft/bf.2.bin',
+      open(10,file='../outputs_pft/bf.2.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf2)
-      open(10,file='../outputs_pft/bf.3.bin',
+      open(10,file='../outputs_pft/bf.3.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf3)
-      open(10,file='../outputs_pft/bf.4.bin',
+      open(10,file='../outputs_pft/bf.4.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf4)
-      open(10,file='../outputs_pft/bf.5.bin',
+      open(10,file='../outputs_pft/bf.5.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf5)
-      open(10,file='../outputs_pft/bf.6.bin',
+      open(10,file='../outputs_pft/bf.6.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf6)
-      open(10,file='../outputs_pft/bf.7.bin',
+      open(10,file='../outputs_pft/bf.7.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf7)
-      open(10,file='../outputs_pft/bf.8.bin',
+      open(10,file='../outputs_pft/bf.8.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf8)
-      open(10,file='../outputs_pft/bf.9.bin',
+      open(10,file='../outputs_pft/bf.9.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf9)
-      open(10,file='../outputs_pft/bf.10.bin',
+      open(10,file='../outputs_pft/bf.10.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf10)
-      open(10,file='../outputs_pft/bf.11.bin',
+      open(10,file='../outputs_pft/bf.11.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf11)
-      open(10,file='../outputs_pft/bf.12.bin',
+      open(10,file='../outputs_pft/bf.12.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf12)
