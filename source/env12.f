@@ -337,25 +337,25 @@ c     if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
       
 !     SAVE RESULTS TO FILES
 c      call nan2ndt(gridcell_ocp, q)
-      open(10,file='../outputs/gridcell_ocp.bin',
+      open(10,file='../outputs/gridcell_ocp.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, gridcell_ocp, q)
       
 c      call nan2ndt(cleaf_pft, q)
-      open(10,file='../outputs/cleaf.bin',
+      open(10,file='../outputs/cleaf.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cleaf_pft, q)
       
 c      call nan2ndt(cawood_pft, q)
-      open(10,file='../outputs/cawood.bin',
+      open(10,file='../outputs/cawood.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10,cawood_pft,q)
       
 c      call nan2ndt(cfroot_pft, q)
-      open(10,file='../outputs/cfroot.bin',
+      open(10,file='../outputs/cfroot.flt',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cfroot_pft,q)
@@ -442,92 +442,92 @@ C     preparando o terreno pra salvar as variaveis
          enddo
       enddo  
 
-      open(10,file='../outputs/ph.bin',
+      open(10,file='../outputs/ph.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, ph)
       
-      open(10,file='../outputs/ar.bin',
+      open(10,file='../outputs/ar.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, ar)
 
-      open(10,file='../outputs/npp.bin',
+      open(10,file='../outputs/npp.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, npp)
 
-      open(10,file='../outputs/clit.bin',
+      open(10,file='../outputs/clit.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit)
 
-      open(10,file='../outputs/csoil.bin',
+      open(10,file='../outputs/csoil.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil)
 
-      open(10,file='../outputs/hr.bin',
+      open(10,file='../outputs/hr.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, hr)
 
-      open(10,file='../outputs/rcm.bin',
+      open(10,file='../outputs/rcm.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rcm)
 
-      open(10,file='../outputs/runom.bin',
+      open(10,file='../outputs/runom.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, runom)
 
-      open(10,file='../outputs/evaptr.bin',
+      open(10,file='../outputs/evaptr.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, evaptr)
 
-      open(10,file='../outputs/wsoil.bin',
+      open(10,file='../outputs/wsoil.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, wsoil)
 
-      open(10,file='../outputs/rml.bin',
+      open(10,file='../outputs/rml.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rml)
 
-      open(10,file='../outputs/rms.bin',
+      open(10,file='../outputs/rms.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rms)
 
-      open(10,file='../outputs/rmf.bin',
+      open(10,file='../outputs/rmf.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rmf)
 
-      open(10,file='../outputs/rm.bin',
+      open(10,file='../outputs/rm.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rm)
 
-      open(10,file='../outputs/rgl.bin',
+      open(10,file='../outputs/rgl.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rgl)
 
-      open(10,file='../outputs/rgf.bin',
+      open(10,file='../outputs/rgf.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rgf)
 
-      open(10,file='../outputs/rgs.bin',
+      open(10,file='../outputs/rgs.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rgs)
 
-      open(10,file='../outputs/rg.bin',
+      open(10,file='../outputs/rg.flt',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, rg)
@@ -580,7 +580,7 @@ C     preparando o terreno pra salvar as variaveis
       enddo
 
 
-      open(50,file='../outputs/ambientais.bin',
+      open(50,file='../outputs/ambientais.flt',
      &        status='unknown',form='unformatted',
      &        access='direct',recl=4*nx*ny)
       write(50,rec=1) ave_npp
