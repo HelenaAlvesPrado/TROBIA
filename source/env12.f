@@ -73,7 +73,8 @@ c     agora as variaveis para pfts
       real csoil_pft(nx,ny,12,q) !Monthly soil carbon
       real hresp_pft(nx,ny,12,q) !Monthly het resp          (kgC/m2)
       real rcm_pft(nx,ny,12,q) 
-      
+!
+
 c     VARIAVEIS HIDROLOGICAS IMPORTANTES   
       real runom_pft(nx,ny,12,q) !Runoff
       real evapm_pft(nx,ny,12,q) !Actual evapotranspiration        
