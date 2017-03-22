@@ -22,7 +22,7 @@ c     Reviewed by jpdarela  jan/2017
 !     ------------------------
 !     
       integer i,j,k,p
-      integer, parameter :: nx=120,ny=160,q=6
+      integer, parameter :: nx=120,ny=160,q=12 !6
       real,parameter :: no_data = -9999.0
      
 !     
@@ -41,9 +41,9 @@ c     Reviewed by jpdarela  jan/2017
       real ipar(nx,ny,12)       !Auxiliar_incident photosynthetic active radiation (w/m2)
       real rhs(nx,ny,12)        !Relative humidity
       real rhaux(nx,ny,12)      !RHS auxiliar
-      real, dimension(nx,ny,q) :: cleafin = 0.0
-     $                          ,cawoodin = 0.0
-     $                          ,cfrootin = 0.0
+      real, dimension(nx,ny,q) :: cleafin = no_data
+     $                          ,cawoodin = no_data
+     $                          ,cfrootin = no_data
 
 
 !     
@@ -86,20 +86,18 @@ c     variables related to carbon allocation and autothrophic respiration (bianc
       real, dimension(nx,ny,q) :: cleaf_pft,cawood_pft,cfroot_pft
 c      real, dimension(nx,ny,q) :: tbiomass_pft !total biomass
 
-
 C      WARNING - NEW VARIABLES ---
-      
+
       real gridcell_ocp(nx,ny,q) !  final grid cell occupation for each pft (percentage of area)
       real betal(nx,ny,12,q)
-      real, dimension(nx,ny,12):: bl1,bl2,bl3,bl4,bl5,bl6
-c ,bl4,bl5,bl6,bl7 ! carbon allocated to growth (monthly sums) 
+      real, dimension(nx,ny,12):: bl1,bl2,bl3,bl4,bl5,bl6, ! carbon allocated to growth (monthly sums)
+     &                            bl7,bl8,bl9,bl10,bl11,bl12   
       real betaw(nx,ny,12,q)
-      real, dimension(nx,ny,12):: bw1,bw2,bw3,bw4,bw5,bw6
-c ,bw4,bw5,bw6,bw7
+      real, dimension(nx,ny,12):: bw1,bw2,bw3,bw4,bw5,bw6,
+     &                            bw7,bw8,bw9,bw10,bw11,bw12 
       real betaf(nx,ny,12,q)
-      real, dimension(nx,ny,12):: bf1,bf2,bf3,bf4,bf5,bf6
-c ,bf4,bf5,bf6,bf7
-
+      real, dimension(nx,ny,12):: bf1,bf2,bf3,bf4,bf5,bf6,
+     &                            bf7,bf8,bf9,bf10,bf11,bf12 
       
 c     variaveis do spinup
       real, dimension(q) :: aux1, aux2, aux3
@@ -130,20 +128,24 @@ c      real, dimension(nx,ny) :: predominant_pft = 0.0
       real, dimension(nx,ny) :: cawood = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell 
       
 C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; ph1 to pft 1)
-      real, dimension(nx,ny,12) :: ph,ph1,ph2,ph3,ph4,ph5,ph6
-      real, dimension(nx,ny,12) :: ar,ar1,ar2,ar3,ar4,ar5,ar6
+      real, dimension(nx,ny,12) :: ph,ph1,ph2,ph3,ph4,ph5,ph6,
+     & ph7,ph8,ph9,ph10,ph11,ph12
+      real, dimension(nx,ny,12) :: ar,ar1,ar2,ar3,ar4,ar5,ar6,
+     & ar7,ar8,ar9,ar10,ar11,ar12 
       real, dimension(nx,ny,12) :: npp,npp1,npp2,npp3,npp4,npp5,
-     & npp6
-      real, dimension(nx,ny,12) :: lai,lai1,lai2,lai3,lai4,
-     & lai5,lai6
+     & npp6,npp7,npp8,npp9,npp10,npp11,npp12        
+      real, dimension(nx,ny,12) :: lai,lai1,lai2,lai3,lai4,lai5,
+     & lai6,lai7,lai8,lai9,lai10,lai11,lai12 
       real, dimension(nx,ny,12) :: clit,clit1,clit2,clit3,clit4,
-     & clit5,clit6
-      real, dimension(nx,ny,12) :: csoil,csoil1,csoil2,csoil3,
-     & csoil4,csoil5,csoil6
-      real, dimension(nx,ny,12) :: hr,hr1,hr2,hr3,hr4,hr5,hr6
-      real, dimension(nx,ny,12) :: rcm,rcm1,rcm2,rcm3,rcm4,rcm5,
-     & rcm6
-      real, dimension(nx,ny,12) :: evaptr,et1,et2,et3,et4,et5,et6
+     & clit5,clit6,clit7,clit8,clit9,clit10,clit11,clit12
+      real, dimension(nx,ny,12) :: csoil,csoil1,csoil2,csoil3,csoil4,
+     & csoil5,csoil6,csoil7,csoil8,csoil9,csoil10,csoil11,csoil12
+      real, dimension(nx,ny,12) :: hr,hr1,hr2,hr3,hr4,hr5,hr6,
+     & hr7,hr8,hr9,hr10,hr11,hr12
+      real, dimension(nx,ny,12) :: rcm,rcm1,rcm2,rcm3,rcm4,rcm5,rcm6,
+     & rcm7,rcm8,rcm9,rcm10,rcm11,rcm12 
+      real, dimension(nx,ny,12) :: evaptr,et1,et2,et3,et4,et5,et6,
+     & et7,et8,et9,et10,et11,et12 
       real, dimension(nx,ny,12) :: wsoil
       real, dimension(nx,ny,12) :: runom
       
@@ -647,6 +649,12 @@ C     preparando o terreno pra salvar as variaveis
                   npp4(i,j,k) = npp_pft(i,j,k,4)
                   npp5(i,j,k) = npp_pft(i,j,k,5)
                   npp6(i,j,k) = npp_pft(i,j,k,6)
+                  npp7(i,j,k) = npp_pft(i,j,k,7)
+                  npp8(i,j,k) = npp_pft(i,j,k,8)
+                  npp9(i,j,k) = npp_pft(i,j,k,9)
+                  npp10(i,j,k) = npp_pft(i,j,k,10)
+                  npp11(i,j,k) = npp_pft(i,j,k,11)
+                  npp12(i,j,k) = npp_pft(i,j,k,12)                  
 
                   ph1(i,j,k) = photo_pft(i,j,k,1)
                   ph2(i,j,k) = photo_pft(i,j,k,2)
@@ -654,6 +662,12 @@ C     preparando o terreno pra salvar as variaveis
                   ph4(i,j,k) = photo_pft(i,j,k,4)
                   ph5(i,j,k) = photo_pft(i,j,k,5)
                   ph6(i,j,k) = photo_pft(i,j,k,6)
+                  ph7(i,j,k) = photo_pft(i,j,k,7)
+                  ph8(i,j,k) = photo_pft(i,j,k,8)
+                  ph9(i,j,k) = photo_pft(i,j,k,9)
+                  ph10(i,j,k) = photo_pft(i,j,k,10)
+                  ph11(i,j,k) = photo_pft(i,j,k,11)
+                  ph12(i,j,k) = photo_pft(i,j,k,12)                  
 
                   ar1(i,j,k) = aresp_pft(i,j,k,1)
                   ar2(i,j,k) = aresp_pft(i,j,k,2)
@@ -661,6 +675,12 @@ C     preparando o terreno pra salvar as variaveis
                   ar4(i,j,k) = aresp_pft(i,j,k,4)
                   ar5(i,j,k) = aresp_pft(i,j,k,5)
                   ar6(i,j,k) = aresp_pft(i,j,k,6)
+                  ar7(i,j,k) = aresp_pft(i,j,k,7)
+                  ar8(i,j,k) = aresp_pft(i,j,k,8)
+                  ar9(i,j,k) = aresp_pft(i,j,k,9)
+                  ar10(i,j,k) = aresp_pft(i,j,k,10)
+                  ar11(i,j,k) = aresp_pft(i,j,k,11)
+                  ar12(i,j,k) = aresp_pft(i,j,k,12)
 
                   lai1(i,j,k) = lai_pft(i,j,k,1)
                   lai2(i,j,k) = lai_pft(i,j,k,2)
@@ -668,6 +688,12 @@ C     preparando o terreno pra salvar as variaveis
                   lai4(i,j,k) = lai_pft(i,j,k,4)
                   lai5(i,j,k) = lai_pft(i,j,k,5)
                   lai6(i,j,k) = lai_pft(i,j,k,6)
+                  lai7(i,j,k) = lai_pft(i,j,k,7)
+                  lai8(i,j,k) = lai_pft(i,j,k,8)
+                  lai9(i,j,k) = lai_pft(i,j,k,9)
+                  lai10(i,j,k) = lai_pft(i,j,k,10)
+                  lai11(i,j,k) = lai_pft(i,j,k,11)
+                  lai12(i,j,k) = lai_pft(i,j,k,12)                  
 
                   hr1(i,j,k) = hresp_pft(i,j,k,1)
                   hr2(i,j,k) = hresp_pft(i,j,k,2)
@@ -675,6 +701,12 @@ C     preparando o terreno pra salvar as variaveis
                   hr4(i,j,k) = hresp_pft(i,j,k,4)
                   hr5(i,j,k) = hresp_pft(i,j,k,5)
                   hr6(i,j,k) = hresp_pft(i,j,k,6)
+                  hr7(i,j,k) = hresp_pft(i,j,k,7)
+                  hr8(i,j,k) = hresp_pft(i,j,k,8)      
+                  hr9(i,j,k) = hresp_pft(i,j,k,9)
+                  hr10(i,j,k) = hresp_pft(i,j,k,10)
+                  hr11(i,j,k) = hresp_pft(i,j,k,11)
+                  hr12(i,j,k) = hresp_pft(i,j,k,12)                  
 
                   clit1(i,j,k) = clit_pft(i,j,k,1)
                   clit2(i,j,k) = clit_pft(i,j,k,2)
@@ -682,6 +714,12 @@ C     preparando o terreno pra salvar as variaveis
                   clit4(i,j,k) = clit_pft(i,j,k,4)
                   clit5(i,j,k) = clit_pft(i,j,k,5)
                   clit6(i,j,k) = clit_pft(i,j,k,6)
+                  clit7(i,j,k) = clit_pft(i,j,k,7)
+                  clit8(i,j,k) = clit_pft(i,j,k,8)
+                  clit9(i,j,k) = clit_pft(i,j,k,9)
+                  clit10(i,j,k) = clit_pft(i,j,k,10)
+                  clit11(i,j,k) = clit_pft(i,j,k,11)
+                  clit12(i,j,k) = clit_pft(i,j,k,12)
 
                   csoil1(i,j,k) = csoil_pft(i,j,k,1)
                   csoil2(i,j,k) = csoil_pft(i,j,k,2)
@@ -689,6 +727,12 @@ C     preparando o terreno pra salvar as variaveis
                   csoil4(i,j,k) = csoil_pft(i,j,k,4)
                   csoil5(i,j,k) = csoil_pft(i,j,k,5)
                   csoil6(i,j,k) = csoil_pft(i,j,k,6)
+                  csoil7(i,j,k) = csoil_pft(i,j,k,7)
+                  csoil8(i,j,k) = csoil_pft(i,j,k,8)
+                  csoil9(i,j,k) = csoil_pft(i,j,k,9)
+                  csoil10(i,j,k) = csoil_pft(i,j,k,10)
+                  csoil11(i,j,k) = csoil_pft(i,j,k,11)
+                  csoil12(i,j,k) = csoil_pft(i,j,k,12)
 
                   et1(i,j,k) = evapm_pft(i,j,k,1)
                   et2(i,j,k) = evapm_pft(i,j,k,2)
@@ -696,13 +740,25 @@ C     preparando o terreno pra salvar as variaveis
                   et4(i,j,k) = evapm_pft(i,j,k,4)
                   et5(i,j,k) = evapm_pft(i,j,k,5)
                   et6(i,j,k) = evapm_pft(i,j,k,6)
-                  
+                  et7(i,j,k) = evapm_pft(i,j,k,7)
+                  et8(i,j,k) = evapm_pft(i,j,k,8)
+                  et9(i,j,k) = evapm_pft(i,j,k,9)
+                  et10(i,j,k) = evapm_pft(i,j,k,10)
+                  et11(i,j,k) = evapm_pft(i,j,k,11)
+                  et12(i,j,k) = evapm_pft(i,j,k,12)
+
                   rcm1(i,j,k) = rcm_pft(i,j,k,1)
                   rcm2(i,j,k) = rcm_pft(i,j,k,2)
                   rcm3(i,j,k) = rcm_pft(i,j,k,3)
                   rcm4(i,j,k) = rcm_pft(i,j,k,4)
                   rcm5(i,j,k) = rcm_pft(i,j,k,5)
                   rcm6(i,j,k) = rcm_pft(i,j,k,6)
+                  rcm7(i,j,k) = rcm_pft(i,j,k,7)
+                  rcm8(i,j,k) = rcm_pft(i,j,k,8)
+                  rcm9(i,j,k) = rcm_pft(i,j,k,9)
+                  rcm10(i,j,k) = rcm_pft(i,j,k,10)
+                  rcm11(i,j,k) = rcm_pft(i,j,k,11)
+                  rcm12(i,j,k) = rcm_pft(i,j,k,12)                  
 
                   bl1(i,j,k) = betal(i,j,k,1)
                   bl2(i,j,k) = betal(i,j,k,2)
@@ -710,6 +766,12 @@ C     preparando o terreno pra salvar as variaveis
                   bl4(i,j,k) = betal(i,j,k,4)
                   bl5(i,j,k) = betal(i,j,k,5)
                   bl6(i,j,k) = betal(i,j,k,6)
+                  bl7(i,j,k) = betal(i,j,k,7)
+                  bl8(i,j,k) = betal(i,j,k,8)
+                  bl9(i,j,k) = betal(i,j,k,9)
+                  bl10(i,j,k) = betal(i,j,k,10)
+                  bl11(i,j,k) = betal(i,j,k,11)
+                  bl12(i,j,k) = betal(i,j,k,12)
 
                   bw1(i,j,k) = betaw(i,j,k,1)
                   bw2(i,j,k) = betaw(i,j,k,2)
@@ -717,14 +779,26 @@ C     preparando o terreno pra salvar as variaveis
                   bw4(i,j,k) = betaw(i,j,k,4)
                   bw5(i,j,k) = betaw(i,j,k,5)
                   bw6(i,j,k) = betaw(i,j,k,6)
-                  
+                  bw7(i,j,k) = betaw(i,j,k,7)
+                  bw8(i,j,k) = betaw(i,j,k,8)
+                  bw9(i,j,k) = betaw(i,j,k,9)
+                  bw10(i,j,k) = betaw(i,j,k,10)
+                  bw11(i,j,k) = betaw(i,j,k,11)
+                  bw12(i,j,k) = betaw(i,j,k,12)
+
                   bf1(i,j,k) = betaf(i,j,k,1)
                   bf2(i,j,k) = betaf(i,j,k,2)
                   bf3(i,j,k) = betaf(i,j,k,3)
                   bf4(i,j,k) = betaf(i,j,k,4)
                   bf5(i,j,k) = betaf(i,j,k,5)
                   bf6(i,j,k) = betaf(i,j,k,6)
-                  
+                  bf7(i,j,k) = betaf(i,j,k,7)
+                  bf8(i,j,k) = betaf(i,j,k,8)
+                  bf9(i,j,k) = betaf(i,j,k,9)
+                  bf10(i,j,k) = betaf(i,j,k,10)
+                  bf11(i,j,k) = betaf(i,j,k,11)
+                  bf12(i,j,k) = betaf(i,j,k,12)                  
+               
                else
                   npp1(i,j,k) = no_data
                   npp2(i,j,k) = no_data
@@ -732,6 +806,12 @@ C     preparando o terreno pra salvar as variaveis
                   npp4(i,j,k) = no_data
                   npp5(i,j,k) = no_data
                   npp6(i,j,k) = no_data
+                  npp7(i,j,k) = no_data
+                  npp8(i,j,k) = no_data
+                  npp9(i,j,k) = no_data
+                  npp10(i,j,k) = no_data
+                  npp11(i,j,k) = no_data
+                  npp12(i,j,k) = no_data
 
                   ph1(i,j,k) = no_data
                   ph2(i,j,k) = no_data
@@ -739,69 +819,130 @@ C     preparando o terreno pra salvar as variaveis
                   ph4(i,j,k) = no_data
                   ph5(i,j,k) = no_data
                   ph6(i,j,k) = no_data
-
+                  ph7(i,j,k) = no_data
+                  ph8(i,j,k) = no_data
+                  ph9(i,j,k) = no_data
+                  ph10(i,j,k) = no_data
+                  ph11(i,j,k) = no_data
+                  ph12(i,j,k) = no_data
+c                  
                   ar1(i,j,k) = no_data
                   ar2(i,j,k) = no_data
                   ar3(i,j,k) = no_data
                   ar4(i,j,k) = no_data
                   ar5(i,j,k) = no_data
                   ar6(i,j,k) = no_data
-
+                  ar7(i,j,k) = no_data
+                  ar8(i,j,k) = no_data
+                  ar9(i,j,k) = no_data
+                  ar10(i,j,k) = no_data
+                  ar11(i,j,k) = no_data
+                  ar12(i,j,k) = no_data
+c                  
                   hr1(i,j,k) = no_data
                   hr2(i,j,k) = no_data
                   hr3(i,j,k) = no_data
                   hr4(i,j,k) = no_data
                   hr5(i,j,k) = no_data
                   hr6(i,j,k) = no_data
-
+                  hr7(i,j,k) = no_data
+                  hr8(i,j,k) = no_data
+                  hr9(i,j,k) = no_data
+                  hr10(i,j,k) = no_data
+                  hr11(i,j,k) = no_data
+                  hr12(i,j,k) = no_data
+c
                   clit1(i,j,k) = no_data
                   clit2(i,j,k) = no_data
                   clit3(i,j,k) = no_data
                   clit4(i,j,k) = no_data
                   clit5(i,j,k) = no_data
                   clit6(i,j,k) = no_data
-
+                  clit7(i,j,k) = no_data
+                  clit8(i,j,k) = no_data
+                  clit9(i,j,k) = no_data
+                  clit10(i,j,k) = no_data
+                  clit11(i,j,k) = no_data
+                  clit12(i,j,k) = no_data
+c
                   csoil1(i,j,k) = no_data
                   csoil2(i,j,k) = no_data
                   csoil3(i,j,k) = no_data
                   csoil4(i,j,k) = no_data
                   csoil5(i,j,k) = no_data
                   csoil6(i,j,k) = no_data
-
+                  csoil7(i,j,k) = no_data
+                  csoil8(i,j,k) = no_data
+                  csoil9(i,j,k) = no_data
+                  csoil10(i,j,k) = no_data
+                  csoil11(i,j,k) = no_data
+                  csoil12(i,j,k) = no_data
+c
                   et1(i,j,k) = no_data
                   et2(i,j,k) = no_data
                   et3(i,j,k) = no_data
                   et4(i,j,k) = no_data
                   et5(i,j,k) = no_data
                   et6(i,j,k) = no_data
-                  
+                  et7(i,j,k) = no_data
+                  et8(i,j,k) = no_data
+                  et9(i,j,k) = no_data
+                  et10(i,j,k) = no_data
+                  et11(i,j,k) = no_data
+                  et12(i,j,k) = no_data
+c                  
                   rcm1(i,j,k) = no_data
                   rcm2(i,j,k) = no_data
                   rcm3(i,j,k) = no_data
                   rcm4(i,j,k) = no_data
                   rcm5(i,j,k) = no_data
                   rcm6(i,j,k) = no_data
-                  
+                  rcm7(i,j,k) = no_data
+                  rcm8(i,j,k) = no_data
+                  rcm9(i,j,k) = no_data
+                  rcm10(i,j,k) = no_data
+                  rcm11(i,j,k) = no_data
+                  rcm12(i,j,k) = no_data
+c                  
                   bl1(i,j,k) = no_data
                   bl2(i,j,k) = no_data
                   bl3(i,j,k) = no_data
                   bl4(i,j,k) = no_data
                   bl5(i,j,k) = no_data
                   bl6(i,j,k) = no_data
-
+                  bl7(i,j,k) = no_data
+                  bl8(i,j,k) = no_data
+                  bl9(i,j,k) = no_data
+                  bl10(i,j,k) = no_data
+                  bl11(i,j,k) = no_data
+                  bl12(i,j,k) = no_data
+c
                   bw1(i,j,k) = no_data
                   bw2(i,j,k) = no_data
                   bw3(i,j,k) = no_data
                   bw4(i,j,k) = no_data
                   bw5(i,j,k) = no_data
                   bw6(i,j,k) = no_data
-                  
+                  bw7(i,j,k) = no_data
+                  bw8(i,j,k) = no_data
+                  bw9(i,j,k) = no_data
+                  bw10(i,j,k) = no_data
+                  bw11(i,j,k) = no_data
+                  bw12(i,j,k) = no_data         
+c                  
                   bf1(i,j,k) = no_data
                   bf2(i,j,k) = no_data
                   bf3(i,j,k) = no_data
                   bf4(i,j,k) = no_data
                   bf5(i,j,k) = no_data
                   bf6(i,j,k) = no_data
+                  bf7(i,j,k) = no_data
+                  bf8(i,j,k) = no_data
+                  bf9(i,j,k) = no_data
+                  bf10(i,j,k) = no_data
+                  bf11(i,j,k) = no_data
+                  bf12(i,j,k) = no_data
+c
                endif
             enddo
          enddo
@@ -833,7 +974,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp6)
-
+      open(10,file='../outputs_pft/npp.7.flt',
+     &    status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, npp7)
+      open(10,file='../outputs_pft/npp.8.flt',
+     &    status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, npp8)
+      open(10,file='../outputs_pft/npp.9.flt',
+     &    status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, npp9)
+      open(10,file='../outputs_pft/npp.10.flt',
+     &    status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, npp10)
+      open(10,file='../outputs_pft/npp.11.flt',
+     &    status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, npp11)
+      open(10,file='../outputs_pft/npp.12.flt',
+     &    status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, npp12)
 
 !     PHOTO      
       open(10,file='../outputs_pft/ph.1.bin',
@@ -860,7 +1024,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph6)
-
+      open(10,file='../outputs_pft/ph.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ph7)
+      open(10,file='../outputs_pft/ph.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ph8)
+      open(10,file='../outputs_pft/ph.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ph9)
+      open(10,file='../outputs_pft/ph.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ph10)
+      open(10,file='../outputs_pft/ph.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ph11)
+      open(10,file='../outputs_pft/ph.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ph12)
       
 !     ARESP
       open(10,file='../outputs_pft/ar.1.bin',
@@ -887,6 +1074,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar6)
+      open(10,file='../outputs_pft/ar.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ar7)
+      open(10,file='../outputs_pft/ar.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ar8)
+      open(10,file='../outputs_pft/ar.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ar9)
+      open(10,file='../outputs_pft/ar.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ar10)
+      open(10,file='../outputs_pft/ar.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ar11)
+      open(10,file='../outputs_pft/ar.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, ar12)
 
       
 !     HRESP
@@ -914,6 +1125,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr6)
+      open(10,file='../outputs_pft/hr.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, hr7)
+      open(10,file='../outputs_pft/hr.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, hr8)
+      open(10,file='../outputs_pft/hr.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, hr9)
+      open(10,file='../outputs_pft/hr.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, hr10)
+      open(10,file='../outputs_pft/hr.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, hr11)
+      open(10,file='../outputs_pft/hr.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, hr12)
 
 
 !     CLIT
@@ -941,6 +1176,30 @@ C     preparando o terreno pra salvar as variaveis
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit6)
+      open(10,file='../outputs_pft/clit.7.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, clit7)
+      open(10,file='../outputs_pft/clit.8.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, clit8)
+      open(10,file='../outputs_pft/clit.9.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, clit9)
+      open(10,file='../outputs_pft/clit.10.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, clit10)
+      open(10,file='../outputs_pft/clit.11.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, clit11)
+      open(10,file='../outputs_pft/clit.12.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, clit12)
 
 
 !     CSOIL
@@ -968,6 +1227,30 @@ C     preparando o terreno pra salvar as variaveis
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil6)
+      open(10,file='../outputs_pft/csoil.7.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, csoil7)
+      open(10,file='../outputs_pft/csoil.8.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, csoil8)
+      open(10,file='../outputs_pft/csoil.9.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, csoil9)
+      open(10,file='../outputs_pft/csoil.10.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, csoil10)
+      open(10,file='../outputs_pft/csoil.11.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, csoil1)
+      open(10,file='../outputs_pft/csoil.12.flt',
+     &     status='unknown',form='unformatted',
+     &     access='direct',recl=4*nx*ny)
+      call save_file12(10, csoil12)
 
 
 !     EVAPM
@@ -995,7 +1278,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, et6)
-
+      open(10,file='../outputs_pft/et.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, et7)
+      open(10,file='../outputs_pft/et.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, et8)
+      open(10,file='../outputs_pft/et.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, et9)
+      open(10,file='../outputs_pft/et.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, et10)
+      open(10,file='../outputs_pft/et.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, et11)
+      open(10,file='../outputs_pft/et.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, et12)
       
 !     RCM 
       open(10,file='../outputs_pft/rcm.1.bin',
@@ -1022,7 +1328,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm6)
-
+      open(10,file='../outputs_pft/rcm.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, rcm7)
+      open(10,file='../outputs_pft/rcm.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, rcm8)
+      open(10,file='../outputs_pft/rcm.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, rcm9)
+      open(10,file='../outputs_pft/rcm.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, rcm10)
+      open(10,file='../outputs_pft/rcm.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, rcm11)
+      open(10,file='../outputs_pft/rcm.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, rcm12)
       
 !     BLEAF
       open(10,file='../outputs_pft/bl.1.bin',
@@ -1049,6 +1378,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl6)
+      open(10,file='../outputs_pft/bl.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bl7)
+      open(10,file='../outputs_pft/bl.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bl8)
+      open(10,file='../outputs_pft/bl.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bl9)
+      open(10,file='../outputs_pft/bl.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bl10)
+      open(10,file='../outputs_pft/bl.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bl11)
+      open(10,file='../outputs_pft/bl.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bl12)
 
 
 !     BAWOOD
@@ -1076,6 +1429,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw6)
+      open(10,file='../outputs_pft/bw.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bw7)
+      open(10,file='../outputs_pft/bw.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bw8)
+      open(10,file='../outputs_pft/bw.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bw9)
+      open(10,file='../outputs_pft/bw.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bw10)
+      open(10,file='../outputs_pft/bw.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bw11)
+      open(10,file='../outputs_pft/bw.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bw12)
 
 
 !     BFROOT
@@ -1103,7 +1480,30 @@ C     preparando o terreno pra salvar as variaveis
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf6)
-
+      open(10,file='../outputs_pft/bf.7.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bf7)
+      open(10,file='../outputs_pft/bf.8.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bf8)
+      open(10,file='../outputs_pft/bf.9.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bf9)
+      open(10,file='../outputs_pft/bf.10.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bf10)
+      open(10,file='../outputs_pft/bf.11.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bf11)
+      open(10,file='../outputs_pft/bf.12.flt',
+     &    status='unknown',form='unformatted',
+     &    access='direct',recl=4*nx*ny)
+      call save_file12(10, bf12)
 
       
       stop
@@ -1115,7 +1515,7 @@ C     preparando o terreno pra salvar as variaveis
       subroutine pft_par(par, dt) !!!!!!!!!  mudamos os valores de dt
       implicit none
 !     input
-      integer, parameter :: vars = 6
+      integer, parameter :: vars = 12 !6
       integer :: par            ! parameter number 
       real, dimension(vars) :: dt,dt1,dt2,dt3,dt4,dt5,dt6
      &    ,dt7,dt8
@@ -1141,14 +1541,33 @@ C     preparando o terreno pra salvar as variaveis
 !
 !
 !     PFT       1       2       3       4       5       6             
-      data dt1/3.77,   4.15,   2.98,   4.5,    3.37,   4.64/ !g1   
-      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 3.1E-5, 5.1E-5, 3.3E-5/ !vcmax       
-      data dt3/0.30,   0.35,   0.35,   0.45,   0.40,   0.40/ !aleaf  
-      data dt4/0.35,   0.35,   0.20,   0.0,    0.25,   0.20/ !aawood  
-      data dt5/0.35,   0.30,   0.45,   0.55,   0.35,   0.45/ !afroot   
-      data dt6/3.0,    2.0,    2.0,    2.0,    3.0,    2.0/ !tleaf   
-      data dt7/30.0,   30.0,   20.0,   0.0,    35.0,   35.0/ !tawood   
-      data dt8/2.0,    2.0,    2.5,    2.0,    2.5,    2.5/ !tfroot      
+!      data dt1/3.77,   4.15,   2.98,   4.5,    3.37,   4.64/ !g1   
+!      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 3.1E-5, 5.1E-5, 3.3E-5/ !vcmax       
+!      data dt3/0.30,   0.35,   0.35,   0.45,   0.40,   0.40/ !aleaf  
+!      data dt4/0.35,   0.35,   0.20,   0.0,    0.25,   0.20/ !aawood  
+!      data dt5/0.35,   0.30,   0.45,   0.55,   0.35,   0.45/ !afroot   
+!      data dt6/3.0,    2.0,    2.0,    2.0,    3.0,    2.0/ !tleaf   
+!      data dt7/30.0,   30.0,   20.0,   0.0,    35.0,   35.0/ !tawood   
+!      data dt8/2.0,    2.0,    2.5,    2.0,    2.5,    2.5/ !tfroot      
+
+!     PFT       1       2       3       4       5       6       7
+!               8       9       10      11      12      
+      data dt1/3.77,   4.15,   2.98,   7.18,   4.5,    3.37,   4.64, !g1
+     &         4.4,    4.6,    3.92,   1.5,    2.72/ 
+      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 6.8E-5, 3.1E-5, 5.1E-5, 3.3E-5, !p21
+     &         3.1E-5, 3.1E-5, 4.4E-5, 4.2E-5, 4.0E-5/ 
+      data dt3/0.30,   0.35,   0.35,   0.35,   0.35,   0.40,   0.40, !aleaf
+     &         0.35,   0.35,   0.35,   0.30,   0.30/ 
+      data dt4/0.35,   0.35,   0.20,   0.20,   0.0,    0.20,   0.20, !aawood
+     &         0.00,   0.20,   0.20,   0.40,   0.40/ 
+      data dt5/0.35,   0.30,   0.45,   0.45,   0.55,   0.45,   0.40, !afroot
+     &         0.55,   0.45,   0.45,   0.30,   0.30/ 
+      data dt6/3.0,    2.0,    2.0,    3.0,    2.0,    3.0,    2.0, !tleaf
+     &         2.0,    2.0,    3.0,    3.0,    2.0/ 
+      data dt7/30.0,   30.0,   20.0,   20.0,   0.0,    35.0,   35.0, !tawood
+     &          0.0,   35.0,   35.0,   40.0,   40.0/ 
+      data dt8/3.0,    2.0,    2.5,    3.0,    2.0,    2.5,    2.0, !tfroot
+     &         2.0,    2.0,    2.5,    3.0,    2.0/ 
 
 
       if(par .eq. 1 ) then      ! g1
@@ -1181,7 +1600,7 @@ c     &     cbwoodini,cstoini,cotherini,crepini)
       IMPLICIT NONE
 
       integer, parameter :: nt=30000
-      integer, parameter :: npfts=6
+      integer, parameter :: npfts=12 !6
       
 c     inputs
       integer i6, kk, k

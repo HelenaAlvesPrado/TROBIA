@@ -22,7 +22,7 @@ c     Reviewed by jpdarela  jan/2017
 !     ------------------------
 !     
       integer i,j,k,p
-      integer, parameter :: nx=720,ny=360,q=6 !12
+      integer, parameter :: nx=720,ny=360,q=12
       real,parameter :: no_data = -9999.0
 !     
 !     Inputs
@@ -631,12 +631,12 @@ C     preparando o terreno pra salvar as variaveis
                   npp4(i,j,k) = npp_pft(i,j,k,4)
                   npp5(i,j,k) = npp_pft(i,j,k,5)
                   npp6(i,j,k) = npp_pft(i,j,k,6)
-c                  npp7(i,j,k) = npp_pft(i,j,k,7)
-c                  npp8(i,j,k) = npp_pft(i,j,k,8)
-c                  npp9(i,j,k) = npp_pft(i,j,k,9)
-c                  npp10(i,j,k) = npp_pft(i,j,k,10)
-c                  npp11(i,j,k) = npp_pft(i,j,k,11)
-c                  npp12(i,j,k) = npp_pft(i,j,k,12)
+                  npp7(i,j,k) = npp_pft(i,j,k,7)
+                  npp8(i,j,k) = npp_pft(i,j,k,8)
+                  npp9(i,j,k) = npp_pft(i,j,k,9)
+                  npp10(i,j,k) = npp_pft(i,j,k,10)
+                  npp11(i,j,k) = npp_pft(i,j,k,11)
+                  npp12(i,j,k) = npp_pft(i,j,k,12)
 c
                   ph1(i,j,k) = photo_pft(i,j,k,1)
                   ph2(i,j,k) = photo_pft(i,j,k,2)
@@ -644,12 +644,12 @@ c
                   ph4(i,j,k) = photo_pft(i,j,k,4)
                   ph5(i,j,k) = photo_pft(i,j,k,5)
                   ph6(i,j,k) = photo_pft(i,j,k,6)
-c                  ph7(i,j,k) = photo_pft(i,j,k,7)
-c                  ph8(i,j,k) = photo_pft(i,j,k,8)
-c                  ph9(i,j,k) = photo_pft(i,j,k,9)
-c                  ph10(i,j,k) = photo_pft(i,j,k,10)
-c                  ph11(i,j,k) = photo_pft(i,j,k,11)
-c                  ph12(i,j,k) = photo_pft(i,j,k,12)
+                  ph7(i,j,k) = photo_pft(i,j,k,7)
+                  ph8(i,j,k) = photo_pft(i,j,k,8)
+                  ph9(i,j,k) = photo_pft(i,j,k,9)
+                  ph10(i,j,k) = photo_pft(i,j,k,10)
+                  ph11(i,j,k) = photo_pft(i,j,k,11)
+                  ph12(i,j,k) = photo_pft(i,j,k,12)
 c
                   ar1(i,j,k) = aresp_pft(i,j,k,1)
                   ar2(i,j,k) = aresp_pft(i,j,k,2)
@@ -657,12 +657,12 @@ c
                   ar4(i,j,k) = aresp_pft(i,j,k,4)
                   ar5(i,j,k) = aresp_pft(i,j,k,5)
                   ar6(i,j,k) = aresp_pft(i,j,k,6)
-c                  ar7(i,j,k) = aresp_pft(i,j,k,7)
-c                  ar8(i,j,k) = aresp_pft(i,j,k,8)
-c                  ar9(i,j,k) = aresp_pft(i,j,k,9)
-c                  ar10(i,j,k) = aresp_pft(i,j,k,10)
-c                  ar11(i,j,k) = aresp_pft(i,j,k,11)
-c                  ar12(i,j,k) = aresp_pft(i,j,k,12)
+                  ar7(i,j,k) = aresp_pft(i,j,k,7)
+                  ar8(i,j,k) = aresp_pft(i,j,k,8)
+                  ar9(i,j,k) = aresp_pft(i,j,k,9)
+                  ar10(i,j,k) = aresp_pft(i,j,k,10)
+                  ar11(i,j,k) = aresp_pft(i,j,k,11)
+                  ar12(i,j,k) = aresp_pft(i,j,k,12)
 c
                   lai1(i,j,k) = lai_pft(i,j,k,1)
                   lai2(i,j,k) = lai_pft(i,j,k,2)
@@ -670,12 +670,12 @@ c
                   lai4(i,j,k) = lai_pft(i,j,k,4)
                   lai5(i,j,k) = lai_pft(i,j,k,5)
                   lai6(i,j,k) = lai_pft(i,j,k,6)
-c                  lai7(i,j,k) = lai_pft(i,j,k,7)
-c                  lai8(i,j,k) = lai_pft(i,j,k,8)
-c                  lai9(i,j,k) = lai_pft(i,j,k,9)
-c                  lai10(i,j,k) = lai_pft(i,j,k,10)
-c                  lai11(i,j,k) = lai_pft(i,j,k,11)
-c                  lai12(i,j,k) = lai_pft(i,j,k,12)
+                  lai7(i,j,k) = lai_pft(i,j,k,7)
+                  lai8(i,j,k) = lai_pft(i,j,k,8)
+                  lai9(i,j,k) = lai_pft(i,j,k,9)
+                  lai10(i,j,k) = lai_pft(i,j,k,10)
+                  lai11(i,j,k) = lai_pft(i,j,k,11)
+                  lai12(i,j,k) = lai_pft(i,j,k,12)
 c
                   hr1(i,j,k) = hresp_pft(i,j,k,1)
                   hr2(i,j,k) = hresp_pft(i,j,k,2)
@@ -683,12 +683,12 @@ c
                   hr4(i,j,k) = hresp_pft(i,j,k,4)
                   hr5(i,j,k) = hresp_pft(i,j,k,5)
                   hr6(i,j,k) = hresp_pft(i,j,k,6)
-c                  hr7(i,j,k) = hresp_pft(i,j,k,7)
-c                  hr8(i,j,k) = hresp_pft(i,j,k,8)      
-c                  hr9(i,j,k) = hresp_pft(i,j,k,9)
-c                  hr10(i,j,k) = hresp_pft(i,j,k,10)
-c                  hr11(i,j,k) = hresp_pft(i,j,k,11)
-c                  hr12(i,j,k) = hresp_pft(i,j,k,12)     
+                  hr7(i,j,k) = hresp_pft(i,j,k,7)
+                  hr8(i,j,k) = hresp_pft(i,j,k,8)      
+                  hr9(i,j,k) = hresp_pft(i,j,k,9)
+                  hr10(i,j,k) = hresp_pft(i,j,k,10)
+                  hr11(i,j,k) = hresp_pft(i,j,k,11)
+                  hr12(i,j,k) = hresp_pft(i,j,k,12)     
 c
                   clit1(i,j,k) = clit_pft(i,j,k,1)
                   clit2(i,j,k) = clit_pft(i,j,k,2)
@@ -696,12 +696,12 @@ c
                   clit4(i,j,k) = clit_pft(i,j,k,4)
                   clit5(i,j,k) = clit_pft(i,j,k,5)
                   clit6(i,j,k) = clit_pft(i,j,k,6)
-c                  clit7(i,j,k) = clit_pft(i,j,k,7)
-c                  clit8(i,j,k) = clit_pft(i,j,k,8)
-c                  clit9(i,j,k) = clit_pft(i,j,k,9)
-c                  clit10(i,j,k) = clit_pft(i,j,k,10)
-c                  clit11(i,j,k) = clit_pft(i,j,k,11)
-c                  clit12(i,j,k) = clit_pft(i,j,k,12)
+                  clit7(i,j,k) = clit_pft(i,j,k,7)
+                  clit8(i,j,k) = clit_pft(i,j,k,8)
+                  clit9(i,j,k) = clit_pft(i,j,k,9)
+                  clit10(i,j,k) = clit_pft(i,j,k,10)
+                  clit11(i,j,k) = clit_pft(i,j,k,11)
+                  clit12(i,j,k) = clit_pft(i,j,k,12)
 c
                   csoil1(i,j,k) = csoil_pft(i,j,k,1)
                   csoil2(i,j,k) = csoil_pft(i,j,k,2)
@@ -709,12 +709,12 @@ c
                   csoil4(i,j,k) = csoil_pft(i,j,k,4)
                   csoil5(i,j,k) = csoil_pft(i,j,k,5)
                   csoil6(i,j,k) = csoil_pft(i,j,k,6)
-c                  csoil7(i,j,k) = csoil_pft(i,j,k,7)
-c                  csoil8(i,j,k) = csoil_pft(i,j,k,8)
-c                  csoil9(i,j,k) = csoil_pft(i,j,k,9)
-c                  csoil10(i,j,k) = csoil_pft(i,j,k,10)
-c                  csoil11(i,j,k) = csoil_pft(i,j,k,11)
-c                  csoil12(i,j,k) = csoil_pft(i,j,k,12)
+                  csoil7(i,j,k) = csoil_pft(i,j,k,7)
+                  csoil8(i,j,k) = csoil_pft(i,j,k,8)
+                  csoil9(i,j,k) = csoil_pft(i,j,k,9)
+                  csoil10(i,j,k) = csoil_pft(i,j,k,10)
+                  csoil11(i,j,k) = csoil_pft(i,j,k,11)
+                  csoil12(i,j,k) = csoil_pft(i,j,k,12)
 c
                   et1(i,j,k) = evapm_pft(i,j,k,1)
                   et2(i,j,k) = evapm_pft(i,j,k,2)
@@ -722,12 +722,12 @@ c
                   et4(i,j,k) = evapm_pft(i,j,k,4)
                   et5(i,j,k) = evapm_pft(i,j,k,5)
                   et6(i,j,k) = evapm_pft(i,j,k,6)
-c                  et7(i,j,k) = evapm_pft(i,j,k,7)
-c                  et8(i,j,k) = evapm_pft(i,j,k,8)
-c                  et9(i,j,k) = evapm_pft(i,j,k,9)
-c                  et10(i,j,k) = evapm_pft(i,j,k,10)
-c                  et11(i,j,k) = evapm_pft(i,j,k,11)
-c                  et12(i,j,k) = evapm_pft(i,j,k,12)
+                  et7(i,j,k) = evapm_pft(i,j,k,7)
+                  et8(i,j,k) = evapm_pft(i,j,k,8)
+                  et9(i,j,k) = evapm_pft(i,j,k,9)
+                  et10(i,j,k) = evapm_pft(i,j,k,10)
+                  et11(i,j,k) = evapm_pft(i,j,k,11)
+                  et12(i,j,k) = evapm_pft(i,j,k,12)
 c                  
                   rcm1(i,j,k) = rcm_pft(i,j,k,1)
                   rcm2(i,j,k) = rcm_pft(i,j,k,2)
@@ -735,12 +735,12 @@ c
                   rcm4(i,j,k) = rcm_pft(i,j,k,4)
                   rcm5(i,j,k) = rcm_pft(i,j,k,5)
                   rcm6(i,j,k) = rcm_pft(i,j,k,6)
-c                  rcm7(i,j,k) = rcm_pft(i,j,k,7)
-c                  rcm8(i,j,k) = rcm_pft(i,j,k,8)
-c                  rcm9(i,j,k) = rcm_pft(i,j,k,9)
-c                  rcm10(i,j,k) = rcm_pft(i,j,k,10)
-c                  rcm11(i,j,k) = rcm_pft(i,j,k,11)
-c                  rcm12(i,j,k) = rcm_pft(i,j,k,12)      
+                  rcm7(i,j,k) = rcm_pft(i,j,k,7)
+                  rcm8(i,j,k) = rcm_pft(i,j,k,8)
+                  rcm9(i,j,k) = rcm_pft(i,j,k,9)
+                  rcm10(i,j,k) = rcm_pft(i,j,k,10)
+                  rcm11(i,j,k) = rcm_pft(i,j,k,11)
+                  rcm12(i,j,k) = rcm_pft(i,j,k,12)      
 c
                   bl1(i,j,k) = betal(i,j,k,1)
                   bl2(i,j,k) = betal(i,j,k,2)
@@ -748,12 +748,12 @@ c
                   bl4(i,j,k) = betal(i,j,k,4)
                   bl5(i,j,k) = betal(i,j,k,5)
                   bl6(i,j,k) = betal(i,j,k,6)
-c                  bl7(i,j,k) = betal(i,j,k,7)
-c                  bl8(i,j,k) = betal(i,j,k,8)
-c                  bl9(i,j,k) = betal(i,j,k,9)
-c                  bl10(i,j,k) = betal(i,j,k,10)
-c                  bl11(i,j,k) = betal(i,j,k,11)
-c                  bl12(i,j,k) = betal(i,j,k,12)
+                  bl7(i,j,k) = betal(i,j,k,7)
+                  bl8(i,j,k) = betal(i,j,k,8)
+                  bl9(i,j,k) = betal(i,j,k,9)
+                  bl10(i,j,k) = betal(i,j,k,10)
+                  bl11(i,j,k) = betal(i,j,k,11)
+                  bl12(i,j,k) = betal(i,j,k,12)
 c
                   bw1(i,j,k) = betaw(i,j,k,1)
                   bw2(i,j,k) = betaw(i,j,k,2)
@@ -761,12 +761,12 @@ c
                   bw4(i,j,k) = betaw(i,j,k,4)
                   bw5(i,j,k) = betaw(i,j,k,5)
                   bw6(i,j,k) = betaw(i,j,k,6)
-c                  bw7(i,j,k) = betaw(i,j,k,7)
-c                  bw8(i,j,k) = betaw(i,j,k,8)
-c                  bw9(i,j,k) = betaw(i,j,k,9)
-c                  bw10(i,j,k) = betaw(i,j,k,10)
-c                  bw11(i,j,k) = betaw(i,j,k,11)
-c                  bw12(i,j,k) = betaw(i,j,k,12)
+                  bw7(i,j,k) = betaw(i,j,k,7)
+                  bw8(i,j,k) = betaw(i,j,k,8)
+                  bw9(i,j,k) = betaw(i,j,k,9)
+                  bw10(i,j,k) = betaw(i,j,k,10)
+                  bw11(i,j,k) = betaw(i,j,k,11)
+                  bw12(i,j,k) = betaw(i,j,k,12)
 c                  
                   bf1(i,j,k) = betaf(i,j,k,1)
                   bf2(i,j,k) = betaf(i,j,k,2)
@@ -774,12 +774,12 @@ c
                   bf4(i,j,k) = betaf(i,j,k,4)
                   bf5(i,j,k) = betaf(i,j,k,5)
                   bf6(i,j,k) = betaf(i,j,k,6)
-c                  bf7(i,j,k) = betaf(i,j,k,7)
-c                  bf8(i,j,k) = betaf(i,j,k,8)
-c                  bf9(i,j,k) = betaf(i,j,k,9)
-c                  bf10(i,j,k) = betaf(i,j,k,10)
-c                  bf11(i,j,k) = betaf(i,j,k,11)
-c                  bf12(i,j,k) = betaf(i,j,k,12) 
+                  bf7(i,j,k) = betaf(i,j,k,7)
+                  bf8(i,j,k) = betaf(i,j,k,8)
+                  bf9(i,j,k) = betaf(i,j,k,9)
+                  bf10(i,j,k) = betaf(i,j,k,10)
+                  bf11(i,j,k) = betaf(i,j,k,11)
+                  bf12(i,j,k) = betaf(i,j,k,12) 
 c                  
                else
                   npp1(i,j,k) = no_data
@@ -788,12 +788,12 @@ c
                   npp4(i,j,k) = no_data
                   npp5(i,j,k) = no_data
                   npp6(i,j,k) = no_data
-c                  npp7(i,j,k) = no_data
-c                  npp8(i,j,k) = no_data
-c                  npp9(i,j,k) = no_data
-c                  npp10(i,j,k) = no_data
-c                  npp11(i,j,k) = no_data
-c                  npp12(i,j,k) = no_data
+                  npp7(i,j,k) = no_data
+                  npp8(i,j,k) = no_data
+                  npp9(i,j,k) = no_data
+                  npp10(i,j,k) = no_data
+                  npp11(i,j,k) = no_data
+                  npp12(i,j,k) = no_data
 c
                   ph1(i,j,k) = no_data
                   ph2(i,j,k) = no_data
@@ -801,12 +801,12 @@ c
                   ph4(i,j,k) = no_data
                   ph5(i,j,k) = no_data
                   ph6(i,j,k) = no_data
-c                  ph7(i,j,k) = no_data
-c                  ph8(i,j,k) = no_data
-c                  ph9(i,j,k) = no_data
-c                  ph10(i,j,k) = no_data
-c                  ph11(i,j,k) = no_data
-c                  ph12(i,j,k) = no_data
+                  ph7(i,j,k) = no_data
+                  ph8(i,j,k) = no_data
+                  ph9(i,j,k) = no_data
+                  ph10(i,j,k) = no_data
+                  ph11(i,j,k) = no_data
+                  ph12(i,j,k) = no_data
 c
                   ar1(i,j,k) = no_data
                   ar2(i,j,k) = no_data
@@ -814,12 +814,12 @@ c
                   ar4(i,j,k) = no_data
                   ar5(i,j,k) = no_data
                   ar6(i,j,k) = no_data
-c                  ar7(i,j,k) = no_data
-c                  ar8(i,j,k) = no_data
-c                  ar9(i,j,k) = no_data
-c                  ar10(i,j,k) = no_data
-c                  ar11(i,j,k) = no_data
-c                  ar12(i,j,k) = no_data
+                  ar7(i,j,k) = no_data
+                  ar8(i,j,k) = no_data
+                  ar9(i,j,k) = no_data
+                  ar10(i,j,k) = no_data
+                  ar11(i,j,k) = no_data
+                  ar12(i,j,k) = no_data
 c
                   hr1(i,j,k) = no_data
                   hr2(i,j,k) = no_data
@@ -827,12 +827,12 @@ c
                   hr4(i,j,k) = no_data
                   hr5(i,j,k) = no_data
                   hr6(i,j,k) = no_data
-c                  hr7(i,j,k) = no_data
-c                  hr8(i,j,k) = no_data
-c                  hr9(i,j,k) = no_data
-c                  hr10(i,j,k) = no_data
-c                  hr11(i,j,k) = no_data
-c                  hr12(i,j,k) = no_data
+                  hr7(i,j,k) = no_data
+                  hr8(i,j,k) = no_data
+                  hr9(i,j,k) = no_data
+                  hr10(i,j,k) = no_data
+                  hr11(i,j,k) = no_data
+                  hr12(i,j,k) = no_data
 c
                   clit1(i,j,k) = no_data
                   clit2(i,j,k) = no_data
@@ -840,12 +840,12 @@ c
                   clit4(i,j,k) = no_data
                   clit5(i,j,k) = no_data
                   clit6(i,j,k) = no_data
-c                  clit7(i,j,k) = no_data
-c                  clit8(i,j,k) = no_data
-c                  clit9(i,j,k) = no_data
-c                  clit10(i,j,k) = no_data
-c                  clit11(i,j,k) = no_data
-c                  clit12(i,j,k) = no_data
+                  clit7(i,j,k) = no_data
+                  clit8(i,j,k) = no_data
+                  clit9(i,j,k) = no_data
+                  clit10(i,j,k) = no_data
+                  clit11(i,j,k) = no_data
+                  clit12(i,j,k) = no_data
 c
                   csoil1(i,j,k) = no_data
                   csoil2(i,j,k) = no_data
@@ -853,12 +853,12 @@ c
                   csoil4(i,j,k) = no_data
                   csoil5(i,j,k) = no_data
                   csoil6(i,j,k) = no_data
-c                  csoil7(i,j,k) = no_data
-c                  csoil8(i,j,k) = no_data
-c                  csoil9(i,j,k) = no_data
-c                  csoil10(i,j,k) = no_data
-c                  csoil11(i,j,k) = no_data
-c                  csoil12(i,j,k) = no_data
+                  csoil7(i,j,k) = no_data
+                  csoil8(i,j,k) = no_data
+                  csoil9(i,j,k) = no_data
+                  csoil10(i,j,k) = no_data
+                  csoil11(i,j,k) = no_data
+                  csoil12(i,j,k) = no_data
 c
                   et1(i,j,k) = no_data
                   et2(i,j,k) = no_data
@@ -866,12 +866,12 @@ c
                   et4(i,j,k) = no_data
                   et5(i,j,k) = no_data
                   et6(i,j,k) = no_data
-c                  et7(i,j,k) = no_data
-c                  et8(i,j,k) = no_data
-c                  et9(i,j,k) = no_data
-c                  et10(i,j,k) = no_data
-c                  et11(i,j,k) = no_data
-c                  et12(i,j,k) = no_data
+                  et7(i,j,k) = no_data
+                  et8(i,j,k) = no_data
+                  et9(i,j,k) = no_data
+                  et10(i,j,k) = no_data
+                  et11(i,j,k) = no_data
+                  et12(i,j,k) = no_data
 c                  
                   rcm1(i,j,k) = no_data
                   rcm2(i,j,k) = no_data
@@ -879,12 +879,12 @@ c
                   rcm4(i,j,k) = no_data
                   rcm5(i,j,k) = no_data
                   rcm6(i,j,k) = no_data
-c                  rcm7(i,j,k) = no_data
-c                  rcm8(i,j,k) = no_data
-c                  rcm9(i,j,k) = no_data
-c                  rcm10(i,j,k) = no_data
-c                  rcm11(i,j,k) = no_data
-c                  rcm12(i,j,k) = no_data
+                  rcm7(i,j,k) = no_data
+                  rcm8(i,j,k) = no_data
+                  rcm9(i,j,k) = no_data
+                  rcm10(i,j,k) = no_data
+                  rcm11(i,j,k) = no_data
+                  rcm12(i,j,k) = no_data
 c                  
                   bl1(i,j,k) = no_data
                   bl2(i,j,k) = no_data
@@ -892,12 +892,12 @@ c
                   bl4(i,j,k) = no_data
                   bl5(i,j,k) = no_data
                   bl6(i,j,k) = no_data
-c                  bl7(i,j,k) = no_data
-c                  bl8(i,j,k) = no_data
-c                  bl9(i,j,k) = no_data
-c                  bl10(i,j,k) = no_data
-c                  bl11(i,j,k) = no_data
-c                  bl12(i,j,k) = no_data
+                  bl7(i,j,k) = no_data
+                  bl8(i,j,k) = no_data
+                  bl9(i,j,k) = no_data
+                  bl10(i,j,k) = no_data
+                  bl11(i,j,k) = no_data
+                  bl12(i,j,k) = no_data
 c
                   bw1(i,j,k) = no_data
                   bw2(i,j,k) = no_data
@@ -905,12 +905,12 @@ c
                   bw4(i,j,k) = no_data
                   bw5(i,j,k) = no_data
                   bw6(i,j,k) = no_data
-c                  bw7(i,j,k) = no_data
-c                  bw8(i,j,k) = no_data
-c                  bw9(i,j,k) = no_data
-c                  bw10(i,j,k) = no_data
-c                  bw11(i,j,k) = no_data
-c                  bw12(i,j,k) = no_data         
+                  bw7(i,j,k) = no_data
+                  bw8(i,j,k) = no_data
+                  bw9(i,j,k) = no_data
+                  bw10(i,j,k) = no_data
+                  bw11(i,j,k) = no_data
+                  bw12(i,j,k) = no_data         
 c                  
                   bf1(i,j,k) = no_data
                   bf2(i,j,k) = no_data
@@ -918,12 +918,12 @@ c
                   bf4(i,j,k) = no_data
                   bf5(i,j,k) = no_data
                   bf6(i,j,k) = no_data
-c                  bf7(i,j,k) = no_data
-c                  bf8(i,j,k) = no_data
-c                  bf9(i,j,k) = no_data
-c                  bf10(i,j,k) = no_data
-c                  bf11(i,j,k) = no_data
-c                  bf12(i,j,k) = no_data
+                  bf7(i,j,k) = no_data
+                  bf8(i,j,k) = no_data
+                  bf9(i,j,k) = no_data
+                  bf10(i,j,k) = no_data
+                  bf11(i,j,k) = no_data
+                  bf12(i,j,k) = no_data
 c                        
                endif
             enddo
@@ -1501,7 +1501,7 @@ c
       subroutine pft_par(par, dt) !!!!!!!!!  mudamos os valores de dt
       implicit none
 !     input
-      integer, parameter :: vars = 6 !12 
+      integer, parameter :: vars = 12 
       integer :: par            ! parameter number 
       real, dimension(vars) :: dt,dt1,dt2,dt3,dt4,dt5,dt6
      &    ,dt7,dt8
@@ -1532,33 +1532,23 @@ c
 !    12 = Boreal Deciduous Tree
       
 !     PFT       1       2       3       4       5       6       7
-!     8       9       10      11      12      
-!      data dt1/3.77,   4.15,   2.98,   7.18,   4.5,    3.37,   4.64, !g1
-!     &    4.4,    4.6,    3.92,   1.5,    2.72/ 
-!      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 6.8E-5, 3.1E-5, 5.1E-5, 3.3E-5, !p21
-!     &    3.1E-5, 3.1E-5, 4.4E-5, 4.2E-5, 4.0E-5/ 
-!      data dt3/0.30,   0.35,   0.35,   0.35,   0.35,   0.40,   0.40, !aleaf
-!     &    0.35,   0.35,   0.35,   0.30,   0.30/ 
-!      data dt4/0.35,   0.35,   0.20,   0.20,   0.0,    0.20,   0.20, !aawood
-!     &    0.00,   0.20,   0.20,   0.40,   0.40/ 
-!      data dt5/0.35,   0.30,   0.45,   0.45,   0.55,   0.45,   0.40, !afroot
-!     &    0.55,   0.45,   0.45,   0.30,   0.30/ 
-!      data dt6/3.0,    2.0,    2.0,    3.0,    2.0,    3.0,    2.0, !tleaf
-!     &    2.0,    2.0,    3.0,    3.0,    2.0/ 
-!      data dt7/30.0,   30.0,   20.0,   20.0,   0.0,    35.0,   35.0, !tawood
-!     &    0.0,    35.0,   35.0,   40.0,   40.0/ 
-!      data dt8/3.0,    2.0,    2.5,    3.0,    2.0,    2.5,    2.0, !tfroot
-!     &    2.0,    2.0,    2.5,    3.0,    2.0/ 
-
-!     PFT       1       2       3       4       5       6             
-      data dt1/3.77,   4.15,   2.98,   4.5,    3.37,   4.64/ !g1   
-      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 3.1E-5, 5.1E-5, 3.3E-5/ !vcmax       
-      data dt3/0.30,   0.35,   0.35,   0.45,   0.40,   0.40/ !aleaf  
-      data dt4/0.35,   0.35,   0.20,   0.0,    0.25,   0.20/ !aawood  
-      data dt5/0.35,   0.30,   0.45,   0.55,   0.35,   0.45/ !afroot   
-      data dt6/3.0,    2.0,    2.0,    2.0,    3.0,    2.0/ !tleaf   
-      data dt7/30.0,   30.0,   20.0,   0.0,    35.0,   35.0/ !tawood   
-      data dt8/2.0,    2.0,    2.5,    2.0,    2.5,    2.5/ !tfroot      
+!               8       9       10      11      12      
+      data dt1/3.77,   4.15,   2.98,   7.18,   4.5,    3.37,   4.64, !g1
+     &         4.4,    4.6,    3.92,   1.5,    2.72/ 
+      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 6.8E-5, 3.1E-5, 5.1E-5, 3.3E-5, !p21
+     &         3.1E-5, 3.1E-5, 4.4E-5, 4.2E-5, 4.0E-5/ 
+      data dt3/0.30,   0.35,   0.35,   0.35,   0.35,   0.40,   0.40, !aleaf
+     &         0.35,   0.35,   0.35,   0.30,   0.30/ 
+      data dt4/0.35,   0.35,   0.20,   0.20,   0.0,    0.20,   0.20, !aawood
+     &         0.00,   0.20,   0.20,   0.40,   0.40/ 
+      data dt5/0.35,   0.30,   0.45,   0.45,   0.55,   0.45,   0.40, !afroot
+     &         0.55,   0.45,   0.45,   0.30,   0.30/ 
+      data dt6/3.0,    2.0,    2.0,    3.0,    2.0,    3.0,    2.0, !tleaf
+     &         2.0,    2.0,    3.0,    3.0,    2.0/ 
+      data dt7/30.0,   30.0,   20.0,   20.0,   0.0,    35.0,   35.0, !tawood
+     &          0.0,   35.0,   35.0,   40.0,   40.0/ 
+      data dt8/3.0,    2.0,    2.5,    3.0,    2.0,    2.5,    2.0, !tfroot
+     &         2.0,    2.0,    2.5,    3.0,    2.0/ 
 
       if(par .eq. 1 ) then      ! g1
          dt(:) = dt1(:)
@@ -1590,7 +1580,7 @@ c     &     cbwoodini,cstoini,cotherini,crepini)
       IMPLICIT NONE
 
       integer, parameter :: nt=30000
-      integer, parameter :: npfts=6 !12
+      integer, parameter :: npfts=12
       
 c     inputs
       integer i6, kk, k

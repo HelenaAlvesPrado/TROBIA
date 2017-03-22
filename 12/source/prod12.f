@@ -76,8 +76,8 @@ c234567
       double precision f3       !Michaelis-Menton O2 constant (Pa)
       double precision f4,f4sun,f4shade !Scaling-up LAI to canopy level (dimensionless)
       
-      real tleaf(6) !(12)             !leaf turnover time (yr)
-      real p21(6) !(12)
+      real tleaf(12)             !leaf turnover time (yr)
+      real p21(12)
       real emax                 !potential evapotranspiration (mm/dia)
       double precision sla      !specific leaf area (m2/kg)
       double precision csa      !sapwood compartment´s carbon content (5% of woody tissues) (kgC/m2)
@@ -419,7 +419,7 @@ c     -----------------------------------------------------------------
       
 !     Internal
 !     --------
-      real g1(6) !(12)
+      real g1(12)
       real rcmax, rcmin
       double precision f1b      !Photosynthesis (micromolCO2/m2/s)
       double precision gs2      !Canopy conductance (m/s)
@@ -611,7 +611,7 @@ c23456
 
       IMPLICIT NONE
  
-      INTEGER, PARAMETER :: NPFT = 6 !12
+      INTEGER, PARAMETER :: NPFT = 12
       INTEGER :: P, MAX_INDEX(1), I
       REAL :: CLEAF(NPFT), CFROOT(NPFT), CAWOOD(NPFT)
       REAL :: TOTAL_BIOMASS_PFT(NPFT),OCP_COEFFS(NPFT)
@@ -821,7 +821,7 @@ c=====================================================================
       implicit none
 c     
 !     variables
-      integer, parameter :: npfts = 6 !12
+      integer, parameter :: npfts = 12
       integer pft   
       real npp                  !potential npp (KgC/m2/yr)
       real*16 npp_aux           !auxiliary variable to calculate potential npp in KgC/m2/day
