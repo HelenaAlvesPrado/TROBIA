@@ -84,7 +84,7 @@ c     variables related to carbon allocation and autothrophic respiration (bianc
       real, dimension(nx,ny,12,q) :: rml_pft,rmf_pft,rms_pft,rm_pft,
      $rgl_pft,rgf_pft,rgs_pft,rg_pft
       real, dimension(nx,ny,q) :: cleaf_pft,cawood_pft,cfroot_pft
-      real, dimension(nx,ny,q) :: tbiomass_pft !total biomass
+c      real, dimension(nx,ny,q) :: tbiomass_pft !total biomass
 
 
 C      WARNING - NEW VARIABLES ---
@@ -111,7 +111,7 @@ c     -----FIM DA DEFINICAO DE VARIAVEIS PARA RODAR O MODELO--
 C
 
 c     variaveis anuais -
-      real, dimension(nx,ny) :: predominant_pft = 0.0
+c      real, dimension(nx,ny) :: predominant_pft = 0.0
       real, dimension(nx,ny) :: ave_ph = 0.0
       real, dimension(nx,ny) :: ave_ar = 0.0
       real, dimension(nx,ny) :: ave_npp = 0.0
@@ -124,10 +124,10 @@ c     variaveis anuais -
       real, dimension(nx,ny) :: ave_evap = 0.0
       real, dimension(nx,ny) :: ave_wsoil = 0.0
       real, dimension(nx,ny) :: cue = 0.0	 !carbon use efficience (npp/ph)
-      real, dimension(nx,ny) :: total_biomass = 0.0	 !total biomass (kgC/m2/yr)	  
-      real, dimension(nx,ny) :: cleaf = 0.0	 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
-      real, dimension(nx,ny) :: cfroot = 0.0	 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
-      real, dimension(nx,ny) :: cawood = 0.0	 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell 
+      real, dimension(nx,ny) :: total_biomass = 0.0 !total biomass (kgC/m2/yr)	  
+      real, dimension(nx,ny) :: cleaf = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cfroot = 0.0 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
+      real, dimension(nx,ny) :: cawood = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell 
       
 C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; ph1 to pft 1)
       real, dimension(nx,ny,12) :: ph,ph1,ph2,ph3,ph4,ph5,ph6
@@ -145,18 +145,18 @@ C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; 
      & rcm6
       real, dimension(nx,ny,12) :: evaptr,et1,et2,et3,et4,et5,et6
       real, dimension(nx,ny,12) :: wsoil
-      real, dimension(nx,ny,12) :: runom!
+      real, dimension(nx,ny,12) :: runom
       
 C     NEW OUTPUTS (AUTOTRF RESPIRATION, ALLOCATION)
       
-      real, dimension(nx,ny,12) :: rml!, rml1, rml2, rml3
-      real, dimension(nx,ny,12) :: rmf!, rmf1, rmf2, rmf3 
-      real, dimension(nx,ny,12) :: rms!, rms1, rms2, rms3
-      real, dimension(nx,ny,12) :: rm!,  rm1,  rm2,  rm3
-      real, dimension(nx,ny,12) :: rgl!, rgl1, rgl2, rgl3
-      real, dimension(nx,ny,12) :: rgf!, rgf1, rgf2, rgf3
-      real, dimension(nx,ny,12) :: rgs!, rgs1, rgs2, rgs3
-      real, dimension(nx,ny,12) :: rg!,  rg1,  rg2,  rg3 
+      real, dimension(nx,ny,12) :: rml !rml1,rml2,rml3
+      real, dimension(nx,ny,12) :: rmf !rmf1,rmf2,rmf3 
+      real, dimension(nx,ny,12) :: rms !rms1,rms2,rms3
+      real, dimension(nx,ny,12) :: rm !rm1,rm2,rm3
+      real, dimension(nx,ny,12) :: rgl !rgl1,rgl2,rgl3
+      real, dimension(nx,ny,12) :: rgf !rgf1,rgf2,rgf3
+      real, dimension(nx,ny,12) :: rgs !rgs1,rgs2,rgs3
+      real, dimension(nx,ny,12) :: rg !rg1,rg2,rg3 
       
 C     -------END DECLARATION----------------------------------------
       
@@ -267,19 +267,19 @@ c      Calculating annual npp
 !     if(mod(nx,10) .eq. 0)print*, (real(i)/real(nx))*100.0, '%'
       enddo
 
-!      call nan2ndt(cleafin, q) !!! --------- incorporado essa subroutina
+      call nan2ndt(cleafin, q) !!! --------- incorporado essa subroutina
       open(10,file='../spinup/clini.bin',
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call savex(10, cleafin, q)
 
-!      call nan2ndt(cfrootin, q)
+      call nan2ndt(cfrootin, q)
       open(10,file='../spinup/cfini.bin',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cfrootin, q)
 
-!      call nan2ndt(cawoodin, q)
+      call nan2ndt(cawoodin, q)
       open(10,file='../spinup/cwini.bin',
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
@@ -297,7 +297,7 @@ c      Calculating annual npp
                   cleaf_pft(i,j,p)  = no_data
                   cfroot_pft(i,j,p) = no_data
                   cawood_pft(i,j,p) = no_data
-				  tbiomass_pft(i,j,p) = no_data
+c                 tbiomass_pft(i,j,p) = no_data
                   gridcell_ocp(i,j,p) = no_data
                enddo
             endif
@@ -318,7 +318,7 @@ c               if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
 !     Atmospheric CO2 pressure (Pa) !Ppmv / Pa
       ca= 363/9.901             !Pa (=363 ppmv; 1981-2010)
 !     +200 ppmv
-!      ca= (563/9.901)             !Pa (=363 ppmv; 1981-2010)
+!      ca= (563/9.901)             
       
 !     =======================================
 !     Calculate environmental variables (wbm)
@@ -331,69 +331,42 @@ c               if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
      &    ,rgf_pft,rgs_pft,rg_pft,cleaf_pft,cawood_pft, cfroot_pft
      &    ,gridcell_ocp,betal,betaw,betaf) 
         
-         
-  
-      
       do i=1,nx
          do j=1,ny
-            if (lsmk(i,j).eq.1) then
+         if (lsmk(i,j).eq.1) then
             do p=1,q
-               if (gridcell_ocp(i,j,1).gt.gridcell_ocp(i,j,2).and.
-     &             gridcell_ocp(i,j,1).gt.gridcell_ocp(i,j,3)) then
-               predominant_pft(i,j)=1.
-               endif
-               if (gridcell_ocp(i,j,2).gt.gridcell_ocp(i,j,1).and.
-     &            (gridcell_ocp(i,j,2).gt.gridcell_ocp(i,j,3))) then
-               predominant_pft(i,j)=2.
-               endif
-               if ((gridcell_ocp(i,j,3).gt.gridcell_ocp(i,j,1)).and.
-     &            (gridcell_ocp(i,j,3).gt.gridcell_ocp(i,j,2))) then
-               predominant_pft(i,j)=3.
-               endif
-              
+            cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
+            cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
+            cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
             enddo
-            endif
+         total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
+         endif
          enddo
-      enddo    
-           
-           do i=1,nx
-         do j=1,ny
-            if (lsmk(i,j).eq.1) then
-            do p=1,q
-c           print*, predominant_pft(i,j)
-            enddo
-            endif
-            enddo
-            enddo
-           
-            
-        do i=1,nx
-         do j=1,ny
-            if (lsmk(i,j).eq.1) then
-            do p=1,q
-             cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
-		 cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
-		 cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
+      enddo
+                     
+c      do i=1,nx
+c         do j=1,ny
+c            if (lsmk(i,j).eq.1) then
+c            do p=1,q
+c               if (gridcell_ocp(i,j,1).gt.gridcell_ocp(i,j,2).and.
+c     &             gridcell_ocp(i,j,1).gt.gridcell_ocp(i,j,3)) then
+c               predominant_pft(i,j)=1.
+c               endif
+c               if (gridcell_ocp(i,j,2).gt.gridcell_ocp(i,j,1).and.
+c     &            (gridcell_ocp(i,j,2).gt.gridcell_ocp(i,j,3))) then
+c               predominant_pft(i,j)=2.
+c               endif
+c               if ((gridcell_ocp(i,j,3).gt.gridcell_ocp(i,j,1)).and.
+c     &            (gridcell_ocp(i,j,3).gt.gridcell_ocp(i,j,2))) then
+c               predominant_pft(i,j)=3.
+c               endif
+              
+c            enddo
+c            endif
+c         enddo
+c      enddo    
 
-            enddo
-        
-			 total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
-            endif
-            enddo
-            enddo
-      
-      do i=1,nx
-         do j=1,ny
-            if (lsmk(i,j).eq.1) then
-           
-c           print*,"cleaf",cleaf(i,j),"cfroot",cfroot(i,j),
-c     & "cawood",cawood(i,j),"totalbiomass", total_biomass(i,j)
-          
-            endif
-            enddo
-            enddo
 
-      
 !     SAVE RESULTS TO FILES
 !      call nan2ndt(gridcell_ocp, q)
       open(10,file='../outputs/gridcell_ocp.bin',
@@ -420,10 +393,10 @@ c     & "cawood",cawood(i,j),"totalbiomass", total_biomass(i,j)
       call savex(10, cfroot_pft,q)
 	  
 !      call nan2ndt(tbiomass_pft, q)
-      open(10,file='../outputs/tbiomass.bin',
-     &     status='unknown',form='unformatted',
-     &     access='direct',recl=4*nx*ny)
-      call savex(10, tbiomass_pft,q)
+!      open(10,file='../outputs/tbiomass.bin',
+!     &     status='unknown',form='unformatted',
+!     &     access='direct',recl=4*nx*ny)
+!      call savex(10, tbiomass_pft,q)
 
       do i = 1,nx
          do j = 1,ny
@@ -629,21 +602,20 @@ C     preparando o terreno pra salvar as variaveis
          enddo
       enddo
 	  
-	     do i = 1,nx
-          do j = 1,ny
+      do i = 1,nx
+         do j = 1,ny
             if(nint(lsmk(i,j)) .ne. 0) then
-			   if ((ave_npp(i,j).ne.0).and.(ave_ph(i,j).ne.0)) then
-			   cue(i,j) = ave_npp(i,j)/ave_ph(i,j)
-               else
-               cue(i,j) = 0.
-               endif
-             else 
-               cue(i,j)= no_data
-               endif
-			   
-!			   print*, 'cue', cue(i,j)  
+                if ((ave_npp(i,j).ne.0).and.(ave_ph(i,j).ne.0)) then
+                   cue(i,j) = ave_npp(i,j)/ave_ph(i,j)
+                else
+                cue(i,j) = 0.
+            endif
+            else 
+            cue(i,j)= no_data
+            endif
+!		print*, 'cue', cue(i,j)  
          enddo
-         enddo
+      enddo
           
 		  		 
 
@@ -675,7 +647,6 @@ C     preparando o terreno pra salvar as variaveis
                   npp4(i,j,k) = npp_pft(i,j,k,4)
                   npp5(i,j,k) = npp_pft(i,j,k,5)
                   npp6(i,j,k) = npp_pft(i,j,k,6)
-c                  npp7(i,j,k) = npp_pft(i,j,k,7)
 
                   ph1(i,j,k) = photo_pft(i,j,k,1)
                   ph2(i,j,k) = photo_pft(i,j,k,2)
@@ -683,7 +654,6 @@ c                  npp7(i,j,k) = npp_pft(i,j,k,7)
                   ph4(i,j,k) = photo_pft(i,j,k,4)
                   ph5(i,j,k) = photo_pft(i,j,k,5)
                   ph6(i,j,k) = photo_pft(i,j,k,6)
-c                  ph7(i,j,k) = photo_pft(i,j,k,7)
 
                   ar1(i,j,k) = aresp_pft(i,j,k,1)
                   ar2(i,j,k) = aresp_pft(i,j,k,2)
@@ -691,7 +661,6 @@ c                  ph7(i,j,k) = photo_pft(i,j,k,7)
                   ar4(i,j,k) = aresp_pft(i,j,k,4)
                   ar5(i,j,k) = aresp_pft(i,j,k,5)
                   ar6(i,j,k) = aresp_pft(i,j,k,6)
-c                  ar7(i,j,k) = aresp_pft(i,j,k,7)
 
                   lai1(i,j,k) = lai_pft(i,j,k,1)
                   lai2(i,j,k) = lai_pft(i,j,k,2)
@@ -699,7 +668,6 @@ c                  ar7(i,j,k) = aresp_pft(i,j,k,7)
                   lai4(i,j,k) = lai_pft(i,j,k,4)
                   lai5(i,j,k) = lai_pft(i,j,k,5)
                   lai6(i,j,k) = lai_pft(i,j,k,6)
-c                  lai7(i,j,k) = lai_pft(i,j,k,7)
 
                   hr1(i,j,k) = hresp_pft(i,j,k,1)
                   hr2(i,j,k) = hresp_pft(i,j,k,2)
@@ -707,7 +675,6 @@ c                  lai7(i,j,k) = lai_pft(i,j,k,7)
                   hr4(i,j,k) = hresp_pft(i,j,k,4)
                   hr5(i,j,k) = hresp_pft(i,j,k,5)
                   hr6(i,j,k) = hresp_pft(i,j,k,6)
-c                  hr7(i,j,k) = hresp_pft(i,j,k,7)
 
                   clit1(i,j,k) = clit_pft(i,j,k,1)
                   clit2(i,j,k) = clit_pft(i,j,k,2)
@@ -715,7 +682,6 @@ c                  hr7(i,j,k) = hresp_pft(i,j,k,7)
                   clit4(i,j,k) = clit_pft(i,j,k,4)
                   clit5(i,j,k) = clit_pft(i,j,k,5)
                   clit6(i,j,k) = clit_pft(i,j,k,6)
-c                  clit7(i,j,k) = clit_pft(i,j,k,7)
 
                   csoil1(i,j,k) = csoil_pft(i,j,k,1)
                   csoil2(i,j,k) = csoil_pft(i,j,k,2)
@@ -723,7 +689,6 @@ c                  clit7(i,j,k) = clit_pft(i,j,k,7)
                   csoil4(i,j,k) = csoil_pft(i,j,k,4)
                   csoil5(i,j,k) = csoil_pft(i,j,k,5)
                   csoil6(i,j,k) = csoil_pft(i,j,k,6)
-c                  csoil7(i,j,k) = csoil_pft(i,j,k,7)
 
                   et1(i,j,k) = evapm_pft(i,j,k,1)
                   et2(i,j,k) = evapm_pft(i,j,k,2)
@@ -731,7 +696,6 @@ c                  csoil7(i,j,k) = csoil_pft(i,j,k,7)
                   et4(i,j,k) = evapm_pft(i,j,k,4)
                   et5(i,j,k) = evapm_pft(i,j,k,5)
                   et6(i,j,k) = evapm_pft(i,j,k,6)
-c                  et7(i,j,k) = evapm_pft(i,j,k,7)
                   
                   rcm1(i,j,k) = rcm_pft(i,j,k,1)
                   rcm2(i,j,k) = rcm_pft(i,j,k,2)
@@ -739,7 +703,6 @@ c                  et7(i,j,k) = evapm_pft(i,j,k,7)
                   rcm4(i,j,k) = rcm_pft(i,j,k,4)
                   rcm5(i,j,k) = rcm_pft(i,j,k,5)
                   rcm6(i,j,k) = rcm_pft(i,j,k,6)
-c                  rcm7(i,j,k) = rcm_pft(i,j,k,7)
 
                   bl1(i,j,k) = betal(i,j,k,1)
                   bl2(i,j,k) = betal(i,j,k,2)
@@ -747,7 +710,6 @@ c                  rcm7(i,j,k) = rcm_pft(i,j,k,7)
                   bl4(i,j,k) = betal(i,j,k,4)
                   bl5(i,j,k) = betal(i,j,k,5)
                   bl6(i,j,k) = betal(i,j,k,6)
-c                  bl7(i,j,k) = betal(i,j,k,7)
 
                   bw1(i,j,k) = betaw(i,j,k,1)
                   bw2(i,j,k) = betaw(i,j,k,2)
@@ -755,7 +717,6 @@ c                  bl7(i,j,k) = betal(i,j,k,7)
                   bw4(i,j,k) = betaw(i,j,k,4)
                   bw5(i,j,k) = betaw(i,j,k,5)
                   bw6(i,j,k) = betaw(i,j,k,6)
-c                  bw7(i,j,k) = betaw(i,j,k,7)
                   
                   bf1(i,j,k) = betaf(i,j,k,1)
                   bf2(i,j,k) = betaf(i,j,k,2)
@@ -763,7 +724,6 @@ c                  bw7(i,j,k) = betaw(i,j,k,7)
                   bf4(i,j,k) = betaf(i,j,k,4)
                   bf5(i,j,k) = betaf(i,j,k,5)
                   bf6(i,j,k) = betaf(i,j,k,6)
-c                  bf7(i,j,k) = betaf(i,j,k,7)
                   
                else
                   npp1(i,j,k) = no_data
@@ -772,7 +732,6 @@ c                  bf7(i,j,k) = betaf(i,j,k,7)
                   npp4(i,j,k) = no_data
                   npp5(i,j,k) = no_data
                   npp6(i,j,k) = no_data
-c                  npp7(i,j,k) = no_data
 
                   ph1(i,j,k) = no_data
                   ph2(i,j,k) = no_data
@@ -780,7 +739,6 @@ c                  npp7(i,j,k) = no_data
                   ph4(i,j,k) = no_data
                   ph5(i,j,k) = no_data
                   ph6(i,j,k) = no_data
-c                  ph7(i,j,k) = no_data
 
                   ar1(i,j,k) = no_data
                   ar2(i,j,k) = no_data
@@ -788,7 +746,6 @@ c                  ph7(i,j,k) = no_data
                   ar4(i,j,k) = no_data
                   ar5(i,j,k) = no_data
                   ar6(i,j,k) = no_data
-c                  ar7(i,j,k) = no_data
 
                   hr1(i,j,k) = no_data
                   hr2(i,j,k) = no_data
@@ -796,7 +753,6 @@ c                  ar7(i,j,k) = no_data
                   hr4(i,j,k) = no_data
                   hr5(i,j,k) = no_data
                   hr6(i,j,k) = no_data
-c                  hr7(i,j,k) = no_data
 
                   clit1(i,j,k) = no_data
                   clit2(i,j,k) = no_data
@@ -804,7 +760,6 @@ c                  hr7(i,j,k) = no_data
                   clit4(i,j,k) = no_data
                   clit5(i,j,k) = no_data
                   clit6(i,j,k) = no_data
-c                  clit7(i,j,k) = no_data
 
                   csoil1(i,j,k) = no_data
                   csoil2(i,j,k) = no_data
@@ -812,7 +767,6 @@ c                  clit7(i,j,k) = no_data
                   csoil4(i,j,k) = no_data
                   csoil5(i,j,k) = no_data
                   csoil6(i,j,k) = no_data
-c                  csoil7(i,j,k) = no_data
 
                   et1(i,j,k) = no_data
                   et2(i,j,k) = no_data
@@ -820,7 +774,6 @@ c                  csoil7(i,j,k) = no_data
                   et4(i,j,k) = no_data
                   et5(i,j,k) = no_data
                   et6(i,j,k) = no_data
-c                  et7(i,j,k) = no_data
                   
                   rcm1(i,j,k) = no_data
                   rcm2(i,j,k) = no_data
@@ -828,7 +781,6 @@ c                  et7(i,j,k) = no_data
                   rcm4(i,j,k) = no_data
                   rcm5(i,j,k) = no_data
                   rcm6(i,j,k) = no_data
-c                  rcm7(i,j,k) = no_data
                   
                   bl1(i,j,k) = no_data
                   bl2(i,j,k) = no_data
@@ -836,7 +788,6 @@ c                  rcm7(i,j,k) = no_data
                   bl4(i,j,k) = no_data
                   bl5(i,j,k) = no_data
                   bl6(i,j,k) = no_data
-c                  bl7(i,j,k) = no_data
 
                   bw1(i,j,k) = no_data
                   bw2(i,j,k) = no_data
@@ -844,7 +795,6 @@ c                  bl7(i,j,k) = no_data
                   bw4(i,j,k) = no_data
                   bw5(i,j,k) = no_data
                   bw6(i,j,k) = no_data
-c                  bw7(i,j,k) = no_data
                   
                   bf1(i,j,k) = no_data
                   bf2(i,j,k) = no_data
@@ -852,7 +802,6 @@ c                  bw7(i,j,k) = no_data
                   bf4(i,j,k) = no_data
                   bf5(i,j,k) = no_data
                   bf6(i,j,k) = no_data
-c                  bf7(i,j,k) = no_data
                endif
             enddo
          enddo
@@ -884,10 +833,7 @@ c                  bf7(i,j,k) = no_data
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, npp6)
-c      open(10,file='../outputs_pft/npp.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &     access='direct',recl=4*nx*ny)
-c      call save_file12(10, npp7)
+
 
 !     PHOTO      
       open(10,file='../outputs_pft/ph.1.bin',
@@ -914,10 +860,6 @@ c      call save_file12(10, npp7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ph6)
-c      open(10,file='../outputs_pft/ph.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, ph7)
 
       
 !     ARESP
@@ -945,10 +887,6 @@ c      call save_file12(10, ph7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, ar6)
-c      open(10,file='../outputs_pft/ar.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, ar7)
 
       
 !     HRESP
@@ -976,10 +914,7 @@ c      call save_file12(10, ar7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, hr6)
-c      open(10,file='../outputs_pft/hr.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, hr7)
+
 
 !     CLIT
       open(10,file='../outputs_pft/clit.1.bin',
@@ -1006,10 +941,7 @@ c      call save_file12(10, hr7)
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, clit6)
-c      open(10,file='../outputs_pft/clit.7.bin',
-c     &     status='unknown',form='unformatted',
-c     &     access='direct',recl=4*nx*ny)
-c      call save_file12(10, clit7)
+
 
 !     CSOIL
       open(10,file='../outputs_pft/csoil.1.bin',
@@ -1036,10 +968,7 @@ c      call save_file12(10, clit7)
      &     status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, csoil6)
-c      open(10,file='../outputs_pft/csoil.7.bin',
-c     &     status='unknown',form='unformatted',
-c     &     access='direct',recl=4*nx*ny)
-c      call save_file12(10, csoil7)
+
 
 !     EVAPM
       open(10,file='../outputs_pft/et.1.bin',
@@ -1066,10 +995,7 @@ c      call save_file12(10, csoil7)
      &    status='unknown',form='unformatted',
      &     access='direct',recl=4*nx*ny)
       call save_file12(10, et6)
-c      open(10,file='../outputs_pft/et.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, et7)
+
       
 !     RCM 
       open(10,file='../outputs_pft/rcm.1.bin',
@@ -1096,10 +1022,7 @@ c      call save_file12(10, et7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm6)
-c      open(10,file='../outputs_pft/rcm.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, rcm7)
+
       
 !     BLEAF
       open(10,file='../outputs_pft/bl.1.bin',
@@ -1126,10 +1049,7 @@ c      call save_file12(10, rcm7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bl6)
-c      open(10,file='../outputs_pft/bl.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, bl7)
+
 
 !     BAWOOD
       open(10,file='../outputs_pft/bw.1.bin',
@@ -1156,10 +1076,7 @@ c      call save_file12(10, bl7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bw6)
-c      open(10,file='../outputs_pft/bw.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, bw7)
+
 
 !     BFROOT
       open(10,file='../outputs_pft/bf.1.bin',
@@ -1186,10 +1103,7 @@ c      call save_file12(10, bw7)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, bf6)
-c       open(10,file='../outputs_pft/bf.7.bin',
-c     &    status='unknown',form='unformatted',
-c     &    access='direct',recl=4*nx*ny)
-c      call save_file12(10, bf7)
+
 
       
       stop
@@ -1216,6 +1130,7 @@ c      call save_file12(10, bf7)
 !     dt7 = tawood
 !     dt8 = tfroot
       
+!     PFTS       
 
 !     1 = Tropical Evergreen tree
 !     2 = Tropical Deciduous tree
@@ -1224,15 +1139,16 @@ c      call save_file12(10, bf7)
 !     5 = Temperate Evergreen tree
 !     6 = Temperate Deciduous tree
 !
+!
 !     PFT       1       2       3       4       5       6             
-      data dt1/3.77,   4.15,   2.98,   4.5,    3.37,   4.64/   
-      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 3.1E-5, 5.1E-5, 3.3E-5/       
-      data dt3/0.30,   0.35,   0.35,   0.45,   0.40,   0.40/   
-      data dt4/0.35,   0.35,   0.20,   0.0,    0.25,   0.20/   
-      data dt5/0.35,   0.30,   0.45,   0.55,   0.35,   0.45/   
-      data dt6/3.0,    2.0,    2.0,    2.0,    3.0,    2.0/   
-      data dt7/30.0,   30.0,   20.0,   0.0,    35.0,   35.0/   
-      data dt8/2.0,    2.0,    2.5,    2.0,    2.5,    2.5/      
+      data dt1/3.77,   4.15,   2.98,   4.5,    3.37,   4.64/ !g1   
+      data dt2/5.9E-5, 3.4E-5, 3.2E-5, 3.1E-5, 5.1E-5, 3.3E-5/ !vcmax       
+      data dt3/0.30,   0.35,   0.35,   0.45,   0.40,   0.40/ !aleaf  
+      data dt4/0.35,   0.35,   0.20,   0.0,    0.25,   0.20/ !aawood  
+      data dt5/0.35,   0.30,   0.45,   0.55,   0.35,   0.45/ !afroot   
+      data dt6/3.0,    2.0,    2.0,    2.0,    3.0,    2.0/ !tleaf   
+      data dt7/30.0,   30.0,   20.0,   0.0,    35.0,   35.0/ !tawood   
+      data dt8/2.0,    2.0,    2.5,    2.0,    2.5,    2.5/ !tfroot      
 
 
       if(par .eq. 1 ) then      ! g1
@@ -1264,7 +1180,7 @@ c     ==================================================
 c     &     cbwoodini,cstoini,cotherini,crepini) 
       IMPLICIT NONE
 
-      integer, parameter :: nt=10000
+      integer, parameter :: nt=30000
       integer, parameter :: npfts=6
       
 c     inputs
@@ -1300,7 +1216,7 @@ c     outputs
       call pft_par(8, tfroot)
 
  
-      sensitivity = 1.10
+      sensitivity = 1.001
       if(nppot .le. 0.0) goto 200
       do i6=1,npfts
          do k=1,nt

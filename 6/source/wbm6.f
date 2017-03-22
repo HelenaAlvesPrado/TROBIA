@@ -173,6 +173,11 @@ c     ------------------------- internal variables---------------------
                cleaf1_pft (p) =  cleaf_ini(i,j,p)
                cawood1_pft(p) = cawood_ini(i,j,p)
                cfroot1_pft(p) = cfroot_ini(i,j,p)
+
+               leaf0(p) = cleaf_ini(i,j,p)
+               froot0(p) = cfroot_ini(i,j,p)
+               awood0(p) = cawood_ini(i,j,p)
+
                cleaf_pft(i,j,p)  = no_data ! leaf biomass (KgC/m2)
                cawood_pft(i,j,p) = no_data ! aboveground biomass (KgC/m2)
                cfroot_pft(i,j,p) = no_data ! fine root biomass (KgC/m2)
@@ -503,7 +508,7 @@ c      real f1b (npft)           !Photosynthesis (micromol/m2/s)
       real rg(npft),rgl(npft),rgf(npft),rgs(npft)
       real cl1(npft),cf1(npft),ca1(npft) ! carbon pre-allocation 
       real cl2(npft),cf2(npft),ca2(npft) ! carbon pos-allocation
-      
+      real dl(npft)
 
 !     Initialize Canopy Resistence Parameters
 !     ---------------------------------------
@@ -598,6 +603,7 @@ c      rh    = 0.685
             rgl(p)   = 0.0
             rgf(p)   = 0.0
             rgs(p)   = 0.0
+            dl(p)    = 0.0
 
             if ((i.eq.1).and.(month.eq.1)) then    
                beta_leaf(p) = 0.00000001
@@ -628,13 +634,17 @@ c      rh    = 0.685
 c     Carbon allocation (carbon content on each compartment)
 !     =====================================================
             call allocation (p, nppa(p), cl1(p), ca1(p), !output !input
-     &          cf1(p),cl2(p), ca2(p), cf2(p)) 
+     &          cf1(p),cl2(p), ca2(p), cf2(p), dl(p)) 
 
             
-            alfa_leaf(p)  = amax1((cl2(p) - cl1(p)), 0.0) 
-            alfa_awood(p) = amax1((ca2(p) - ca1(p)), 0.0)
-            alfa_froot(p) = amax1((cf2(p) - cf1(p)), 0.0)
-            
+!            alfa_leaf(p)  = amax1((cl2(p) - cl1(p)), 0.0) 
+!            alfa_awood(p) = amax1((ca2(p) - ca1(p)), 0.0)
+!            alfa_froot(p) = amax1((cf2(p) - cf1(p)), 0.0)
+
+            alfa_leaf(p)  = cl2(p) - cl1(p)
+            alfa_awood(p) = ca2(p) - ca1(p)
+            alfa_froot(p) = cf2(p) - cf1(p)
+
 !     Snow budget
 !     ===========     
             smelt(p) = 2.63 + 2.55*temp + 0.0912*temp*prain !Snowmelt (mm/day)
@@ -682,7 +692,7 @@ c     Carbon allocation (carbon content on each compartment)
                
 !     Carbon cycle (Microbial respiration, litter and soil carbon)
 !     ============================================================     
-               call carbon2 (ts,f5(p),evap(p),laia(p)
+               call carbon2 (ts,f5(p),evap(p),laia(p),dl(p)
      &             ,cl(p),cs(p),hr(p))   
             endif
 
@@ -715,9 +725,12 @@ c     Carbon allocation (carbon content on each compartment)
             cleafavg_pft(p)  =  cl2(p)
             cawoodavg_pft(p) =  ca2(p)
             cfrootavg_pft(p) =  cf2(p)
-            betalavg(p) = betalavg(p) + alfa_leaf(p)  
-            betawavg(p) = betawavg(p) + alfa_awood(p)
-            betafavg(p) = betafavg(p) + alfa_froot(p)
+c            betalavg(p) = betalavg(p) + alfa_leaf(p)  
+c            betawavg(p) = betawavg(p) + alfa_awood(p)
+c            betafavg(p) = betafavg(p) + alfa_froot(p)
+            betalavg(p) = betalavg(p) + (alfa_leaf(p) * 1e6)  !kg m-2 to kg km-2  
+            betawavg(p) = betawavg(p) + (alfa_awood(p) * 1e6)
+            betafavg(p) = betafavg(p) + (alfa_froot(p) * 1e6)            
             cl1_pft(p) = cl2(p)     ! Adicionado ------ para fazer transforcaoes diarias
             ca1_pft(p) = ca2(p)     ! Adicionado ------ para fazer transforcaoes diarias
             cf1_pft(p) = cf2(p)     ! Adicionado ------ para fazer transforcaoes diarias

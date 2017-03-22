@@ -428,8 +428,8 @@ c     -----------------------------------------------------------------
       call pft_par(1, g1)
       
       f1b = (f1_in*10e5)        ! Helena - Mudei algumas coisas aqui
-!      aa = (f1b/363.)           ! Entenda o algoritmo e tenha certeza de que 
-       aa = (f1b/563.) 
+      aa = (f1b/363.)           ! Entenda o algoritmo e tenha certeza de que 
+!       aa = (f1b/563.) 
       g0 = 0.01                 ! condiz com a realidade esperada =)
       rcmax = 553.000
       rcmin = 100.000
@@ -469,7 +469,7 @@ c     -----------------------------------------------------------------
 !     Microbial (heterotrophic) respiration
 !     =====================================
       
-      subroutine carbon2 (tsoil,f5c,evap,laia, !Inputs
+      subroutine carbon2 (tsoil,f5c,evap,laia,d_litter, !Inputs
      &    cl,cs,hr)             !Outputs
       implicit none
 !     Variables
@@ -482,6 +482,7 @@ c     -----------------------------------------------------------------
       real f5c                 !Stress response to soil moisture (dimensionless)
       real evap                 !Actual evapotranspiration (mm/day)
       real laia
+      real d_litter
 
 !     xOutputs 
 !     -------
@@ -535,7 +536,7 @@ C      call critical_value(f7)
 !     Litterfall (kgC/m2)
 !     ------------------
 !     
-      lf = p33 * laia
+      lf = p33 * (laia + d_litter)
 C      call critical_value(lf)
 !     
 !     Litter carbon (kgC/m2)
@@ -812,7 +813,7 @@ c
 c=====================================================================
       
       subroutine allocation (pft, npp ,scl1,sca1,scf1,
-     &    scl2,sca2,scf2)          !output
+     &    scl2,sca2,scf2,bio_litter)          !output
       implicit none
 c     
 !     variables
@@ -826,8 +827,9 @@ c
       real sca2                  !final carbon content on aboveground woody biomass compartment (KgC/m2)
       real scf1                  !previous day carbon content on fine roots compartment (KgC/m2)
       real scf2                  !final carbon content on fine roots compartment (KgC/m2)      
+      real bio_litter
       real*16 scf2_128, sca2_128, scl2_128
-      real aleaf(npfts)             !npp percentage allocated compartment
+      real aleaf(npfts)          !npp percentage allocated compartment
       real aawood(npfts)
       real afroot(npfts)
       real tleaf(npfts)             !turnover time (yr)
@@ -845,13 +847,13 @@ c
 c     
 c     
 c     initialization
-      if((scl1 .lt. 0.00001) .or. (scf1 .lt. 0.00001)) then
-         IF(NPP .lt. 0.00001) THEN
+      if((scl1 .lt. 1e-12) .or. (scf1 .lt. 1e-12)) then
+         bio_litter = scl1 + scf1 + sca1
             scl2 = 0.0
             scf2 = 0.0
             sca2 = 0.0 
             goto 10
-         ENDIF
+         
       endif   
       npp_aux = npp/365.0       !transform (KgC/m2/yr) in (KgC/m2/day)
       scl2_128 = scl1 + (aleaf(pft) * npp_aux) -(scl1 /(tleaf(pft)
@@ -861,18 +863,18 @@ c     initialization
       if(aawood(pft) .gt. 0.0) then
          sca2_128 = sca1 +(aawood(pft)*npp_aux)-(sca1/(tawood(pft)
      &       *365.0))
+         sca2 = real(sca2_128,4)
       else
          sca2 = 0.0
       endif
 
       scf2 = real(scf2_128,4)
-      sca2 = real(sca2_128,4)
       scl2 = real(scl2_128,4)
 
 
-      if(scl2 .lt. 0.0) scl2 = 0.0
-      if(scf2 .lt. 0.0) scf2 = 0.0
-      if(sca2 .lt. 0.0) sca2 = 0.0
+      if(scl2 .lt. 1e-12) scl2 = 0.0
+      if(scf2 .lt. 1e-12) scf2 = 0.0
+      if(sca2 .lt. 1e-12) sca2 = 0.0
       
  10   continue
       return
