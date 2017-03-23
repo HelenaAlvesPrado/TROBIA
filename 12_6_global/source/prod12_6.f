@@ -416,7 +416,7 @@ c     -----------------------------------------------------------------
       
 !     Internal
 !     --------
-      real g1(12)!(6)
+      real g1(12)
       real rcmax, rcmin
       double precision f1b      !Photosynthesis (micromolCO2/m2/s)
       double precision gs2      !Canopy conductance (m/s)
@@ -431,7 +431,7 @@ c     -----------------------------------------------------------------
       aa = (f1b/363.)           ! Entenda o algoritmo e tenha certeza de que 
 !       aa = (f1b/563.) 
       g0 = 0.01                 ! condiz com a realidade esperada =)
-      rcmax = 553.000
+      rcmax = 2000.000          ! Valor experimental
       rcmin = 100.000
 
       if(f1_in .le. 0.0) then 
@@ -445,7 +445,7 @@ c     -----------------------------------------------------------------
          goto 110
       endif
  10   continue
-      if (vpd_in .gt. 0.95) then
+      if (vpd_in .gt. 1.5) then !1.5, seguindo recomendacao do Tomas
          rc2_in = rcmax
          goto 110
       else
