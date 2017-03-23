@@ -24,7 +24,7 @@ c     Reviewed by jpdarela  jan/2017
       integer i,j,k,p
       integer, parameter :: nx=720,ny=360,q=12
       real,parameter :: no_data = -9999.0
-!!!     
+!     
 !     Inputs
 !     ------
 !     
@@ -135,9 +135,9 @@ C     THESE WILL RECEIVE MEANS BETWEEN q PFTs and for each pft (ex. ph to mean; 
       real, dimension(nx,ny,12) :: lai,lai1,lai2,lai3,lai4,lai5,
      & lai6,lai7,lai8,lai9,lai10,lai11,lai12 
       real, dimension(nx,ny,12) :: clit,clit1,clit2,clit3,clit4,
-     & clit5, clit6,clit7,clit8,clit9,clit10,clit11,clit12
+     & clit5,clit6,clit7,clit8,clit9,clit10,clit11,clit12
       real, dimension(nx,ny,12) :: csoil,csoil1,csoil2,csoil3,csoil4,
-     & csoil5,csoil6,csoil7,csoil8,csoil9, csoil10,csoil11,csoil12
+     & csoil5,csoil6,csoil7,csoil8,csoil9,csoil10,csoil11,csoil12
       real, dimension(nx,ny,12) :: hr,hr1,hr2,hr3,hr4,hr5,hr6,
      & hr7,hr8,hr9,hr10,hr11,hr12
       real, dimension(nx,ny,12) :: rcm,rcm1,rcm2,rcm3,rcm4,rcm5,rcm6,
@@ -317,7 +317,7 @@ c     Calculating annual npp
                temp(i,j,k) = t(i,j,k) !+ant(i,j,k) !uncomment to use future anomalies
                p0(i,j,k) = ps(i,j,k) * 0.01 ! transforamando de pascal pra mbar (kPa)
                prec(i,j,k) = pr(i,j,k) !+anpr(i,j,k) !+pr(i,j,k)*0.2 !uncomment to use future anomalies
-c     if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0  
+c               if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0  
             enddo
          enddo
       enddo
@@ -331,25 +331,24 @@ c     if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
 !     =======================================
       
       call wbm (prec,temp,lsmk,p0,ca,par,rhs,cleafin,cawoodin,cfrootin,
-     &    emaxm, tsoil, photo_pft,aresp_pft,npp_pft,lai_pft,
-     &    clit_pft,csoil_pft, hresp_pft,rcm_pft,runom_pft,
-     &    evapm_pft,wsoil_pft,rml_pft,rmf_pft,rms_pft,rm_pft,rgl_pft
-     &    ,rgf_pft,rgs_pft,rg_pft,cleaf_pft,cawood_pft, cfroot_pft
-     &    ,gridcell_ocp,betal,betaw,betaf)
-
-             do i=1,nx
-             do j=1,ny
-             if (lsmk(i,j).eq.1) then
-             do p=1,q
-             cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
-                         cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
-                         cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
-
-             enddo
-             total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
+     & emaxm, tsoil, photo_pft,aresp_pft,npp_pft,lai_pft,
+     & clit_pft,csoil_pft, hresp_pft,rcm_pft,runom_pft,
+     & evapm_pft,wsoil_pft,rml_pft,rmf_pft,rms_pft,rm_pft,rgl_pft,
+     & rgf_pft,rgs_pft,rg_pft,cleaf_pft,cawood_pft, cfroot_pft,
+     & gridcell_ocp,betal,betaw,betaf)
+ 
+      do i=1,nx
+         do j=1,ny
+            if (lsmk(i,j).eq.1) then
+               do p=1,q
+                  cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
+                  cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
+                  cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
+               enddo
+              total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
             endif
-            enddo
-            enddo
+         enddo
+      enddo
       
       
       
@@ -377,6 +376,12 @@ c      call nan2ndt(cfroot_pft, q)
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call savex(10, cfroot_pft,q)
+
+c      call nan2ndt(tbiomass_pft, q)
+c     open(10,file='../outputs/tbiomass.bin',
+c    &     status='unknown',form='unformatted',
+c    &     access='direct',recl=4*nx*ny)
+c      call savex(10, tbiomass_pft,q)      
       
       do i = 1,nx
          do j = 1,ny
@@ -1527,25 +1532,23 @@ c
 !    12 = Boreal Deciduous Tree
       
 !     PFT       1       2       3       4       5       6       7
-!     8       9       10      11      12      
+!               8       9       10      11      12      
       data dt1/3.77,   4.15,   2.98,   7.18,   4.5,    3.37,   4.64, !g1
-     &    4.4,    4.6,    3.92,   1.5,    2.72/ 
+     &         4.4,    4.6,    3.92,   1.5,    2.72/ 
       data dt2/5.9E-5, 3.4E-5, 3.2E-5, 6.8E-5, 3.1E-5, 5.1E-5, 3.3E-5, !p21
-     &    3.1E-5, 3.1E-5, 4.4E-5, 4.2E-5, 4.0E-5/ 
+     &         3.1E-5, 3.1E-5, 4.4E-5, 4.2E-5, 4.0E-5/ 
       data dt3/0.30,   0.35,   0.35,   0.35,   0.35,   0.40,   0.40, !aleaf
-     &    0.35,   0.35,   0.35,   0.30,   0.30/ 
+     &         0.35,   0.35,   0.35,   0.30,   0.30/ 
       data dt4/0.35,   0.35,   0.20,   0.20,   0.0,    0.20,   0.20, !aawood
-     &    0.00,   0.20,   0.20,   0.40,   0.40/ 
+     &         0.00,   0.20,   0.20,   0.40,   0.40/ 
       data dt5/0.35,   0.30,   0.45,   0.45,   0.55,   0.45,   0.40, !afroot
-     &    0.55,   0.45,   0.45,   0.30,   0.30/ 
+     &         0.55,   0.45,   0.45,   0.30,   0.30/ 
       data dt6/3.0,    2.0,    2.0,    3.0,    2.0,    3.0,    2.0, !tleaf
-     &    2.0,    2.0,    3.0,    3.0,    2.0/ 
+     &         2.0,    2.0,    3.0,    3.0,    2.0/ 
       data dt7/30.0,   30.0,   20.0,   20.0,   0.0,    35.0,   35.0, !tawood
-     &    0.0,    35.0,   35.0,   40.0,   40.0/ 
+     &          0.0,   35.0,   35.0,   40.0,   40.0/ 
       data dt8/3.0,    2.0,    2.5,    3.0,    2.0,    2.5,    2.0, !tfroot
-     &    2.0,    2.0,    2.5,    3.0,    2.0/ 
-
-
+     &         2.0,    2.0,    2.5,    3.0,    2.0/ 
 
       if(par .eq. 1 ) then      ! g1
          dt(:) = dt1(:)
