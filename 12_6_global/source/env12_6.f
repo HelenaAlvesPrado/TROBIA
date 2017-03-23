@@ -1,6 +1,5 @@
 c234567
-!  
-! teste   
+!     
       program env
 !     
       implicit none
