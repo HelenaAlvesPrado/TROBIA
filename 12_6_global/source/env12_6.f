@@ -27,6 +27,7 @@ c     Reviewed by jpdarela  jan/2017
 !     Inputs
 !     ------
 !     
+! teste
       real ca                   !CO2 concentration (Pa)
       real lsmk(nx,ny)          !Land=1/Ocean=0
       real p0(nx,ny,12)         !Atmospheric pressure (mb)
