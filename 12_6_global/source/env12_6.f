@@ -16,13 +16,11 @@ c     Reviewed by jpdarela  jan/2017
 !     Execute with ./a.exe
 !     =======================================================================
 
-
-
 !     Parameters and variables
 !     ------------------------
 !     
       integer i,j,k,p
-      integer, parameter :: nx=720,ny=360,q=12 !6
+      integer, parameter :: nx=720,ny=360,q=12
       real,parameter :: no_data = -9999.0
      
 !     
@@ -32,7 +30,7 @@ c     Reviewed by jpdarela  jan/2017
       real ca                   !CO2 concentration (Pa)
       real lsmk(nx,ny)          !Land=1/Ocean=0
       real p0(nx,ny,12)         !Atmospheric pressure (mb)
-      real ps(nx,ny,12)         ! auxiliar to read atm pressure information
+      real ps(nx,ny,12)         !Auxiliar to read atm pressure information
       real prec(nx,ny,12)       !Precipitation (mm/month)
       real pr(nx,ny,12)         !Auxiliar_precipitation (mm/month)
       real temp(nx,ny,12)       !Temperature (oC)
