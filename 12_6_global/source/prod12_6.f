@@ -429,7 +429,6 @@ c     -----------------------------------------------------------------
       
       f1b = (f1_in*10e5)        ! Helena - Mudei algumas coisas aqui
       aa = (f1b/363.)           ! Entenda o algoritmo e tenha certeza de que 
-!       aa = (f1b/563.) 
       g0 = 0.01                 ! condiz com a realidade esperada =)
       rcmax = 2000.000          ! Valor experimental
       rcmin = 100.000

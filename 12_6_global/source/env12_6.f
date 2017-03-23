@@ -27,7 +27,6 @@ c     Reviewed by jpdarela  jan/2017
 !     Inputs
 !     ------
 !     
-! teste
       real ca                   !CO2 concentration (Pa)
       real lsmk(nx,ny)          !Land=1/Ocean=0
       real p0(nx,ny,12)         !Atmospheric pressure (mb)
@@ -120,8 +119,8 @@ c      real, dimension(nx,ny) :: predominant_pft = 0.0
       real, dimension(nx,ny) :: ave_runom = 0.0
       real, dimension(nx,ny) :: ave_evap = 0.0
       real, dimension(nx,ny) :: ave_wsoil = 0.0
-      real, dimension(nx,ny) :: cue = 0.0	 !carbon use efficience (npp/ph)
-      real, dimension(nx,ny) :: total_biomass = 0.0 !total biomass (kgC/m2/yr)	  
+      real, dimension(nx,ny) :: cue = 0.0 !carbon use efficience (npp/ph)
+      real, dimension(nx,ny) :: t_biomass = 0.0 !total biomass (kgC/m2/yr)	  
       real, dimension(nx,ny) :: cleaf = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell
       real, dimension(nx,ny) :: cfroot = 0.0 !leaf biomass (kgC/m2/yr) - sum of all pfts in a grid cell
       real, dimension(nx,ny) :: cawood = 0.0 !total biomass (kgC/m2/yr) - sum of all pfts in a grid cell 
@@ -334,14 +333,16 @@ c               if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
         
       do i=1,nx
          do j=1,ny
-         if (lsmk(i,j).eq.1) then
-            do p=1,q
-            cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
-            cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
-            cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
-            enddo
-         total_biomass(i,j)= cleaf(i,j) + cfroot(i,j) + cawood(i,j)
-         endif
+            if (nint(lsmk(i,j)) .eq. 1) then
+               do p=1,q
+                  cleaf(i,j)= cleaf(i,j) + cleaf_pft(i,j,p)
+                  cfroot(i,j)= cfroot(i,j) + cfroot_pft(i,j,p)
+                  cawood(i,j)= cawood(i,j) + cawood_pft(i,j,p)
+               enddo
+               t_biomass(i,j)=cleaf(i,j)+cfroot(i,j)+cawood(i,j)
+               else
+               t_biomass(i,j)= no_data
+            endif
          enddo
       enddo
                      
@@ -634,7 +635,7 @@ C     preparando o terreno pra salvar as variaveis
       write(50,rec=9) ave_evap
       write(50,rec=10) ave_wsoil
       write(50,rec=11) ave_ph 
-      write(50,rec=12) total_biomass
+      write(50,rec=12) t_biomass
       close(50)
 
       
