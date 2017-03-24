@@ -1012,9 +1012,6 @@ c
      &    status='unknown',form='unformatted',
      &    access='direct',recl=4*nx*ny)
       call save_file12(10, rcm6)
-      open(10,file='../outputs_pft/rcm.7.bin',
-     &    status='unknown',form='unformatted',
-     &    access='direct',recl=4*nx*ny)
 c
 c      
 !     BLEAF
@@ -1098,7 +1095,6 @@ c
       call save_file12(10, bf6)
 c
 c
-      
       stop
       end program env
 
