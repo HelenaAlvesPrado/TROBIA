@@ -434,6 +434,7 @@ c     -----------------------------------------------------------------
       rcmin = 100.000
 
       if(f1_in .le. 0.0) then 
+c       print*,"fl1_in le 0.0"
          rc2_in = rcmax
          goto 110
       endif
@@ -455,10 +456,20 @@ c     -----------------------------------------------------------------
             goto 110
          endif
       endif
+
+! é aqui
       
       gs2 = (gs/41.)
       if(gs2 .le. 0.0) rc2_in = rcmax
       if(gs2 .gt. 0.0) rc2_in = real((gs2**(-1)),4)
+
+    
+
+      if(rc2_in.le.0.0) then
+      print*,"rc2_in le 0.0",rc2_in
+      endif   
+
+
  110  continue	
       
       return
@@ -706,6 +717,8 @@ c23456
          evap = evap*(86400./2.45e6) !mm/day
          evap = amax1(evap,0.)  !Eliminates condensation
       endif
+
+        
 
       return
       end subroutine penman     

@@ -345,7 +345,7 @@ c               if (prec(i,j,k).lt.0.0) prec (i,j,k) = 0.0
             endif
          enddo
       enddo
-                     
+                    
 c      do i=1,nx
 c         do j=1,ny
 c            if (lsmk(i,j).eq.1) then
@@ -366,7 +366,7 @@ c               endif
 c            enddo
 c            endif
 c         enddo
-c      enddo    
+c      enddo  
 
 
 !     SAVE RESULTS TO FILES
@@ -1506,6 +1506,18 @@ c
       call save_file12(10, bf12)
 
       
+      
+        do i=1,nx
+             do j=1,ny
+                  if (i.eq.363.and.j.eq.228) then
+                print*, "ave_rc", ave_rc(i,j)
+                  endif
+             enddo
+           enddo
+
+
+
+
       stop
       end program env
 
@@ -1769,18 +1781,18 @@ c     outputs
             do k = 1,nl
                
                if(var(i,j,k) .gt. 1E12)then
-                  var(i,j,k) = 0.0
-c                  print*, 'var .gt. 1e32',i,j,k
+                  var(i,j,k) = 0.
+c                  print*, 'var .gt. 1e32',var(i,j,k),i,j,k
                endif
                
                if(var(i,j,k) .lt. 1E-12) then
-                  var(i,j,k) = 0.0
-c                  print*, 'var .lt. 1e-32',i,j,k
+                  var(i,j,k) = 0.
+c                  print*, 'var .lt. 1e-32',var(i,j,k),i,j,k
                endif
                
                if(isnan(var(i,j,k))) then
-                  var(i,j,k) = no_data
-c                  print*, 'NaN found', '---place',i,j,k
+                  var(i,j,k) = 0.0
+c                  print*, 'NaN found',var(i,j,k), '---place',i,j,k
                endif
                
             enddo
