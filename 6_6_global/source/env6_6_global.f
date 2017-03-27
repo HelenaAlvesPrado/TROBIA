@@ -1203,9 +1203,11 @@ c     outputs
       call pft_par(7, tawood)
       call pft_par(8, tfroot)
 
-      nppot = 1.5
+c      nppot = 1.5  !teste norte da áfrica
       sensitivity = 1.001
-      if(nppot .le. 0.0) goto 200
+      if(nppot .le. 0.0) then !goto 200
+        nppot=1.5
+      endif  
       do i6=1,npfts
          do k=1,nt
             if (k.eq.1) then
