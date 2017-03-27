@@ -1203,7 +1203,7 @@ c     outputs
       call pft_par(7, tawood)
       call pft_par(8, tfroot)
 
- 
+      nppot = 1.5
       sensitivity = 1.001
       if(nppot .le. 0.0) goto 200
       do i6=1,npfts
