@@ -1269,6 +1269,7 @@ c      nppot = 1.5  !teste norte da áfrica
          cfrootini(i6) = cfrootini(i6) * ocp(i6)
       enddo
  !200  continue
+      continue
       return
       end subroutine spinup
 !     ================================
