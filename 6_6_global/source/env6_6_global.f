@@ -1205,8 +1205,10 @@ c     outputs
 
 c      nppot = 1.5  !teste norte da áfrica
       sensitivity = 1.001
-      if(nppot .le. 0.0) then !goto 200
-        nppot=1.5
+c      if(nppot .le. 0.0) goto 200 !original
+       
+         if (nppot.le.0.0) then
+          nppot=5.5       !!é só um teste
       endif  
       do i6=1,npfts
          do k=1,nt
@@ -1268,8 +1270,7 @@ c      nppot = 1.5  !teste norte da áfrica
          cawoodini(i6) = cawoodini(i6) * ocp(i6)
          cfrootini(i6) = cfrootini(i6) * ocp(i6)
       enddo
- !200  continue
-      continue
+c 200  continue !! original
       return
       end subroutine spinup
 !     ================================
